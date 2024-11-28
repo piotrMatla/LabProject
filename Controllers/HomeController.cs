@@ -1,6 +1,7 @@
 using System.Diagnostics;
 using LabProject.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 namespace LabProject.Controllers
 {
@@ -18,6 +19,49 @@ namespace LabProject.Controllers
             return View();
         }
 
+        [HttpGet]
+        public IActionResult SignIn()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult SignIn(UserLogin user)
+        {
+            if (ModelState.IsValid)
+            {
+                return View("Test", user);
+            }
+            else return View();
+            
+        }
+
+        public IActionResult Test(UserLogin user)
+        {
+            return View();
+        }
+
+        [HttpGet]
+        public IActionResult SignUp()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult SignUp(User user)
+        {
+            if (ModelState.IsValid)
+            {
+                return View("Test2", user);
+            }
+            else return View();
+
+        }
+
+        public IActionResult Test2(User user)
+        {
+            return View();
+        }
         public IActionResult Privacy()
         {
             return View();
