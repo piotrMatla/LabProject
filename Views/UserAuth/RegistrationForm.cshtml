@@ -1,0 +1,78 @@
+﻿@model LabProject.Models.User
+
+@{
+    ViewData["Title"] = "Registration Form";
+}
+
+<h1>Registration Form</h1>
+
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form method="post">
+
+            @using (Html.BeginForm("RegistrationForm", "UserAuth", FormMethod.Post))
+            {
+                @* @Html.ValidationSummary(false, "", new { @class = "text-danger" }) *@
+
+                 <div class="form-group"> 
+                     <label asp-for="FirstName" class="control-label">First name:</label>
+                     @Html.TextBoxFor(a => a.FirstName, new { @class = "form-control", @id = "FirstName" })
+                     @Html.ValidationMessageFor(a => a.FirstName, "", new { @class = "text-danger"})
+                 </div>
+                 <div class="form-group"> 
+                     <label asp-for="LastName" class="control-label">Last name:</label>
+                    @Html.TextBoxFor(a => a.LastName, new { @class = "form-control", @id = "LastName" })
+                    @Html.ValidationMessageFor(a => a.LastName, "", new { @class = "text-danger" })
+                 </div> 
+                 <div class="form-group"> 
+                     <label asp-for="Email" class="control-label">Email:</label>
+                    @Html.TextBoxFor(a => a.Email, new { @class = "form-control", @id = "Email" })
+                    @Html.ValidationMessageFor(a => a.Email, "", new { @class = "text-danger" })
+                 </div> 
+                 <div class="form-group"> 
+                     <label asp-for="Password" class="control-label">Password:</label>
+                     @Html.PasswordFor(a => a.Password, new { @class = "form-control", @id = "Password" })
+                     @Html.ValidationMessageFor(a => a.Password, "", new { @class = "text-danger" })
+                 </div> 
+                 <div class="form-group"> 
+                     <label asp-for="PasswordConfirmation" class="control-label">Confirm password:</label>
+                    @Html.PasswordFor(a => a.PasswordConfirmation, new { @class = "form-control", @id = "PasswordConfirmation" })
+                    @Html.ValidationMessageFor(a => a.PasswordConfirmation, "", new { @class = "text-danger" })
+                 </div> 
+                 <div class="form-group"> 
+                     <label asp-for="MobileNumber" class="control-label">Mobile number:</label>
+                    @Html.TextBoxFor(a => a.MobileNumber, new { @class = "form-control", @id = "MobileNumber" })
+                    @Html.ValidationMessageFor(a => a.MobileNumber, "", new { @class = "text-danger" })
+                 </div> 
+                 <div class="form-group"> 
+                     <label asp-for="DateOfBirth" class="control-label">Date of birth:</label>
+                    @Html.TextBoxFor(a => a.DateOfBirth, new { @class = "form-control", @id = "DateOfBirth" })
+                    @Html.ValidationMessageFor(a => a.DateOfBirth, "", new { @class = "text-danger" })
+                 </div> 
+                <div class="form-group form-check"> 
+                    <label class="form-check-label">
+                        <input class="form-check-input" asp-for="AgreeToTerms" /> I accept the content of the <a href="#" >terms of service</a>
+                     </label> 
+                 </div> 
+                 <div class="form-group form-check"> 
+                     <label class="form-check-label">
+                        <input class="form-check-input" asp-for="PrivacyPolicyConsent" /> I have read and agree to the contents of the <a href="https://localhost:32769/Home/Privacy" target="_blank">Privacy Policy</a> of the site
+                     </label> 
+                 </div>
+                 <div class="form-group">
+                     <button type="submit" class="btn btn-success">Sign up</button>
+                     <button type="reset" class="btn btn-danger">Reset</button>
+                </div>
+            }
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

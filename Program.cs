@@ -1,3 +1,6 @@
+using LabProject.Data;
+using Microsoft.EntityFrameworkCore;
+
 namespace LabProject
 {
     public class Program
@@ -9,7 +12,10 @@ namespace LabProject
             // Add services to the container.
             builder.Services.AddControllersWithViews();
 
+            builder.Services.AddDbContext<AppDbContext>(options => options.UseMySQL(builder.Configuration.GetConnectionString("DefaultConnection")));
+
             var app = builder.Build();
+
 
             // Configure the HTTP request pipeline.
             if (!app.Environment.IsDevelopment())
