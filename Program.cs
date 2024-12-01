@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using LabProject.Areas.Identity.Data;
+using LabProject.Models;
 namespace LabProject
 {
     public class Program
@@ -11,6 +12,7 @@ namespace LabProject
             var connectionString = builder.Configuration.GetConnectionString("LabProjectDbContextConnection") ?? throw new InvalidOperationException("Connection string 'LabProjectDbContextConnection' not found.");
 
             builder.Services.AddDbContext<LabProjectDbContext>(options => options.UseSqlServer(connectionString));
+            builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(connectionString));
 
             builder.Services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true).AddEntityFrameworkStores<LabProjectDbContext>();
 

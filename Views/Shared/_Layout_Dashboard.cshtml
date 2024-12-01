@@ -1,12 +1,10 @@
-﻿@using Microsoft.AspNetCore.Identity
-@using LabProject.Areas.Identity.Data
+﻿
 
 @{
-    var CurrentUser = await UserManager.GetUserAsync(User);
-    var FirstName = CurrentUser?.FirstName;
+    
 }
 
-@inject UserManager<ApplicationUser> UserManager
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -26,14 +24,14 @@
                     aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
-            <a id="manage" class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Hello @FirstName!</a>
+            
             <ul class="nav flex-column">
                 
                 <li class="nav-item">
                     <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+                    <a class="nav-link text-dark" asp-area="" asp-controller="Category" asp-action="CategoryList">Categories</a>
                 </li>
             </ul>
 
