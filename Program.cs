@@ -1,3 +1,6 @@
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+using LabProject.Areas.Identity.Data;
 namespace LabProject
 {
     public class Program
@@ -5,6 +8,11 @@ namespace LabProject
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
+            var connectionString = builder.Configuration.GetConnectionString("LabProjectDbContextConnection") ?? throw new InvalidOperationException("Connection string 'LabProjectDbContextConnection' not found.");
+
+            builder.Services.AddDbContext<LabProjectDbContext>(options => options.UseSqlServer(connectionString));
+
+            builder.Services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true).AddEntityFrameworkStores<LabProjectDbContext>();
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();
@@ -25,6 +33,8 @@ namespace LabProject
             app.UseRouting();
 
             app.UseAuthorization();
+
+            app.MapRazorPages();
 
             app.MapControllerRoute(
                 name: "default",
