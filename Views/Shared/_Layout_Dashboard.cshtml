@@ -1,5 +1,4 @@
 ﻿
-
 @{
     
 }
@@ -12,42 +11,167 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - LabProject</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/core.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/theme-default.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/boxicons.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/LabProject.styles.css" asp-append-version="true" />
 </head>
 <body>
     <div class="d-flex">
         <!-- Menu boczne -->
-        <nav class="bg-light border-end p-3" style="width: 250px; height: 100vh;">
-            <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">LabProject</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                    aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
+        @* <nav class="bg-light border-end p-3" style="width: 250px; height: 100vh;"> *@
+        @*     <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">LabProject</a> *@
+        @*     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent" *@
+        @*             aria-expanded="false" aria-label="Toggle navigation"> *@
+        @*         <span class="navbar-toggler-icon"></span> *@
+        @*     </button> *@
             
-            <ul class="nav flex-column">
+        @*     <ul class="nav flex-column"> *@
                 
-                <li class="nav-item">
-                    <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link text-dark" asp-area="" asp-controller="Category" asp-action="CategoryList">Categories</a>
-                </li>
-            </ul>
+        @*         <li class="nav-item"> *@
+        @*             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a> *@
+        @*         </li> *@
+        @*         <li class="nav-item"> *@
+        @*             <a class="nav-link text-dark" asp-area="" asp-controller="Category" asp-action="CategoryList">Categories</a> *@
+        @*         </li> *@
+        @*     </ul> *@
 
-            <form id="logoutForm" class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
-                <button id="logout" type="submit" class="nav-link btn btn-link text-dark border-0">Logout</button>
-            </form>
-        </nav>
+        @*     <form id="logoutForm" class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })"> *@
+        @*         <button id="logout" type="submit" class="nav-link btn btn-link text-dark border-0">Logout</button> *@
+        @*     </form> *@
+        @* </nav> *@
+
+        <aside id="layout-menu" class="layout-menu menu-vertical menu bg-menu-theme " style="max-width: 250px; height: 100vh;">
+            <div class="app-brand p-2 demo">
+                <a href="/Dashboard/Index" class="app-brand-link">
+                    <img src="assets/logo.png" class="w-25" alt="Alternate Text" />
+                    <span class="app-brand-text demo menu-text fw-bolder ms-2">MoneyMind</span>
+                </a>
+
+                <a href="javascript:void(0);" class="layout-menu-toggle menu-link text-large ms-auto d-block d-xl-none">
+                    menu
+                    <i class="bx bx-chevron-left bx-sm align-middle">Menu</i>
+                </a>
+            </div>
+
+            <div class="menu-inner-shadow"></div>
+
+            <ul class="menu-inner py-1">
+                <!-- Dashboard -->
+                <li class="menu-item active">
+
+                    <a class="nav-link menu-link text-dark" asp-area="" asp-controller="Dashboard" asp-action="Index"><i class="menu-icon tf-icons bx bx-home-circle"></i>Dashboard</a>
+                </li>
+               
+                
+
+                <!-- Layouts -->
+                <li class="menu-item">
+
+
+                    <a class="nav-link menu-link text-dark" asp-area="" asp-controller="Category" asp-action="CategoryList"><i class="menu-icon tf-icons bx bx-layout"></i>Categories</a>
+                </li>
+
+
+                <li class="menu-header small text-uppercase">
+                    <span class="menu-header-text">Account</span>
+                </li>
+                <li class="menu-item">
+                    <a href="javascript:void(0);" class="menu-link menu-toggle">
+                        <i class="menu-icon tf-icons bx bx-dock-top"></i>
+                        <div data-i18n="Account Settings">Account Settings</div>
+                    </a>
+                    <ul class="menu-sub">
+                        
+                        <li class="menu-item">
+                            <a href="pages-account-settings-notifications.html" class="menu-link">
+                                <div data-i18n="Notifications">Notifications</div>
+                            </a>
+                        </li>
+                        <li class="menu-item">
+                            <a href="pages-account-settings-connections.html" class="menu-link">
+                                <div data-i18n="Connections">Connections</div>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="menu-item">
+                    <a href="pages-account-settings-account.html" class="menu-link">
+                        <form id="logoutForm" class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
+                            <button id="logout" type="submit" class="nav-link btn btn-link text-dark border-0">Logout</button>
+                        </form>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="javascript:void(0);" class="menu-link menu-toggle">
+                        <i class="menu-icon tf-icons bx bx-lock-open-alt"></i>
+                        <div data-i18n="Authentications">Authentications</div>
+                    </a>
+                    <ul class="menu-sub">
+                        <li class="menu-item">
+                            <a href="auth-login-basic.html" class="menu-link" target="_blank">
+                                <div data-i18n="Basic">Login</div>
+                            </a>
+                        </li>
+                        <li class="menu-item">
+                            <a href="auth-register-basic.html" class="menu-link" target="_blank">
+                                <div data-i18n="Basic">Register</div>
+                            </a>
+                        </li>
+                        <li class="menu-item">
+                            <a href="auth-forgot-password-basic.html" class="menu-link" target="_blank">
+                                <div data-i18n="Basic">Forgot Password</div>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="menu-item">
+                    <a href="javascript:void(0);" class="menu-link menu-toggle">
+                        <i class="menu-icon tf-icons bx bx-cube-alt"></i>
+                        <div data-i18n="Misc">Misc</div>
+                    </a>
+                    <ul class="menu-sub">
+                        <li class="menu-item">
+                            <a href="pages-misc-error.html" class="menu-link">
+                                <div data-i18n="Error">Error</div>
+                            </a>
+                        </li>
+                        <li class="menu-item">
+                            <a href="pages-misc-under-maintenance.html" class="menu-link">
+                                <div data-i18n="Under Maintenance">Under Maintenance</div>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <!-- Components -->
+                <li class="menu-header small text-uppercase"><span class="menu-header-text">Components</span></li>
+                <!-- Cards -->
+                <li class="menu-item">
+                    <a href="cards-basic.html" class="menu-link">
+                        <i class="menu-icon tf-icons bx bx-collection"></i>
+                        <div data-i18n="Basic">Cards</div>
+                    </a>
+                </li>
+                <!-- User interface -->
+               
+
+               
+            </ul>
+        </aside>
 
         <!-- Główna zawartość -->
         <main class="flex-grow-1 p-4">
             @RenderBody()
         </main>
+        
     </div>
+    
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="~/js/menu.js" asp-append-version="true"></script>
+    <script src="~/js/helpers.js" asp-append-version="true"></script>
+    <script src="~/js/bootstrap.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>
