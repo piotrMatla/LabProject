@@ -19,6 +19,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
+using LabProject.Models;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace LabProject.Areas.Identity.Pages.Account
 {
@@ -30,13 +32,14 @@ namespace LabProject.Areas.Identity.Pages.Account
         private readonly IUserEmailStore<ApplicationUser> _emailStore;
         private readonly ILogger<RegisterModel> _logger;
         private readonly IEmailSender _emailSender;
+        private readonly UserRegistrationHandler _userRegistrationHandler;
 
         public RegisterModel(
             UserManager<ApplicationUser> userManager,
             IUserStore<ApplicationUser> userStore,
             SignInManager<ApplicationUser> signInManager,
             ILogger<RegisterModel> logger,
-            IEmailSender emailSender)
+            IEmailSender emailSender, UserRegistrationHandler userRegistrationHandler)
         {
             _userManager = userManager;
             _userStore = userStore;
@@ -44,6 +47,7 @@ namespace LabProject.Areas.Identity.Pages.Account
             _signInManager = signInManager;
             _logger = logger;
             _emailSender = emailSender;
+            _userRegistrationHandler = userRegistrationHandler;
         }
 
         /// <summary>
@@ -112,7 +116,7 @@ namespace LabProject.Areas.Identity.Pages.Account
             public string ConfirmPassword { get; set; }
         }
 
-
+       
         public async Task OnGetAsync(string returnUrl = null)
         {
             ReturnUrl = returnUrl;
@@ -137,6 +141,8 @@ namespace LabProject.Areas.Identity.Pages.Account
                 if (result.Succeeded)
                 {
                     _logger.LogInformation("User created a new account with password.");
+
+                    await _userRegistrationHandler.AddDefaultCategoriesAsync(user.Id);
 
                     var userId = await _userManager.GetUserIdAsync(user);
                     var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
@@ -169,6 +175,8 @@ namespace LabProject.Areas.Identity.Pages.Account
             // If we got this far, something failed, redisplay form
             return Page();
         }
+
+        
 
         private ApplicationUser CreateUser()
         {

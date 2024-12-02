@@ -12,9 +12,14 @@ namespace LabProject
             var connectionString = builder.Configuration.GetConnectionString("LabProjectDbContextConnection") ?? throw new InvalidOperationException("Connection string 'LabProjectDbContextConnection' not found.");
 
             builder.Services.AddDbContext<LabProjectDbContext>(options => options.UseSqlServer(connectionString));
+            builder.Services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true).AddEntityFrameworkStores<LabProjectDbContext>();
+
             builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(connectionString));
 
-            builder.Services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true).AddEntityFrameworkStores<LabProjectDbContext>();
+            
+
+            builder.Services.AddTransient<UserRegistrationHandler>();
+            builder.Services.AddScoped<UserRegistrationHandler>();
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();

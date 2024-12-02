@@ -1,13 +1,11 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using LabProject.Models;
+using Microsoft.EntityFrameworkCore;
 
-namespace LabProject.Models
+public class ApplicationDbContext : DbContext
 {
-    public class ApplicationDbContext : DbContext
+    public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
     {
-        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
-        {
-        }
-        public DbSet<Category> Categories { get; set; }
-
     }
+    public DbSet<Category> Categories { get; set; }
+
 }

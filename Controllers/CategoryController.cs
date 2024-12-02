@@ -1,24 +1,37 @@
-﻿using LabProject.Models;
+﻿using LabProject.Areas.Identity.Data;
+using LabProject.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace LabProject.Controllers
 {
     [Authorize]
     public class CategoryController : Controller
     {
-        private static IList<Category> categories = new List<Category>
-             {
-                new Category { Name = "Jedzenie", IsDefault = true},
-                new Category { Name = "Transport", IsDefault = true },
-                new Category { Name = "Rozrywka", IsDefault = true},
-             };
+        private readonly ApplicationDbContext _dbContext;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-        // GET: CategoryController
-        public ActionResult CategoryList()
+        public CategoryController(ApplicationDbContext dbContext, UserManager<ApplicationUser> userManager)
         {
-            
+            _dbContext = dbContext;
+            _userManager = userManager;
+        }
+        // GET: CategoryController
+        public async Task<IActionResult> CategoryList()
+        {
+            var user = await _userManager.GetUserAsync(User);
+            if (user == null)
+            {
+                return RedirectToAction("Login", "Account");
+            }
+
+            var categories = _dbContext.Categories
+            .Where(c => c.UserId == user.Id)
+            .ToList();
+
             return View(categories);
         }
 
@@ -29,7 +42,7 @@ namespace LabProject.Controllers
         }
 
         // GET: CategoryController/Create
-        public ActionResult Create()
+        public ActionResult Crgeate()
         {
             return View();
         }
