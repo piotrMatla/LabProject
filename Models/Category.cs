@@ -10,8 +10,7 @@ namespace LabProject.Models
 
         [Required]
         public string Name { get; set; }
-        public bool IsDefault { get; set; } // Czy kategoria jest domyślna
-        public string UserId { get; set; } = string.Empty; // ID użytkownika
-        public ApplicationUser? User { get; set; } // Powiązanie z użytkownikiem
+        public bool IsDefault { get; set; } 
+        public string UserId { get; set; } 
     }
 }

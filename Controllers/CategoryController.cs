@@ -11,12 +11,11 @@ namespace LabProject.Controllers
     [Authorize]
     public class CategoryController : Controller
     {
-        private readonly ApplicationDbContext _dbContext;
+        private readonly ApplicationDbContext _context;
         private readonly UserManager<ApplicationUser> _userManager;
-
         public CategoryController(ApplicationDbContext dbContext, UserManager<ApplicationUser> userManager)
         {
-            _dbContext = dbContext;
+            _context = dbContext;
             _userManager = userManager;
         }
         // GET: CategoryController
@@ -28,7 +27,7 @@ namespace LabProject.Controllers
                 return RedirectToAction("Login", "Account");
             }
 
-            var categories = _dbContext.Categories
+            var categories = _context.Categories
             .Where(c => c.UserId == user.Id)
             .ToList();
 
@@ -42,19 +41,25 @@ namespace LabProject.Controllers
         }
 
         // GET: CategoryController/Create
-        public ActionResult Crgeate()
+        public ActionResult Create()
         {
-            return View();
+            return View(new Category());
         }
 
         // POST: CategoryController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection)
+        public async Task<IActionResult> Create(Category category)
         {
+            var user = await _userManager.GetUserAsync(User);
             try
             {
-                return RedirectToAction(nameof(Index));
+                category.IsDefault = false;
+                category.UserId = user.Id;
+
+                _context.Categories.Add(category);
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(CategoryList));
             }
             catch
             {

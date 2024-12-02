@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using LabProject.Models;
 using Microsoft.AspNetCore.Identity;
 
 namespace LabProject.Areas.Identity.Data;
@@ -13,5 +14,6 @@ public class ApplicationUser : IdentityUser
     public string LastName { get; set; }
 
     public DateTime CreatedAt { get; set; } = DateTime.Now;
+   
 }
 
