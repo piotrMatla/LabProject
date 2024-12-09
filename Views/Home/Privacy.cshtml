@@ -1,5 +1,11 @@
-﻿@{
+﻿﻿@using Microsoft.AspNetCore.Identity
+@using LabProject.Areas.Identity.Data
+
+@inject SignInManager<ApplicationUser> SignInManager
+
+@{
     ViewData["Title"] = "Privacy Policy";
+    Layout = SignInManager.IsSignedIn(User) ? "_Layout_Dashboard" : "_Layout";
 }
 <h1>@ViewData["Title"]</h1>
 

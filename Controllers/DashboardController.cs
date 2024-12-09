@@ -3,7 +3,9 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using System.Drawing.Drawing2D;
 using System.Threading.Tasks;
+using static System.Net.Mime.MediaTypeNames;
 
 
 namespace LabProject.Controllers
@@ -23,7 +25,7 @@ namespace LabProject.Controllers
 
             
             var FirstName = currentUser?.FirstName;
-            ViewBag.Message = $"Witaj, {FirstName}!";
+            ViewBag.Message = $"Hello, <strong class='text-primary'>{FirstName}</strong>";
             ViewBag.Layout = "_Layout_Dashboard";
             return View();
         }
