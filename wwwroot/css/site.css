@@ -20,3 +20,19 @@ html {
 body {
   margin-bottom: 60px;
 }
+
+/*.dashboard_menu {
+    max-width: 250px; 
+    top: 0; 
+    bottom: 0;
+}
+*/
+
+.sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 250px;
+    height: 90vh;
+    z-index: 1000;
+}

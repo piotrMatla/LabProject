@@ -1,8 +1,94 @@
 ﻿@{
     ViewData["Title"] = "Home Page";
+    Layout = "_Layout";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+    <header class="text-center py-5">
+        <h1>Welcome to MoneyMind</h1>
+        <p class="lead">Your personal finance assistant to track, plan, and save smarter.</p>
+        <a href="#features" class="btn btn-primary btn-lg">Discover Features</a>
+        <a href="#signup" class="btn btn-outline-secondary btn-lg">Sign Up Now</a>
+    </header>
+
+    <section id="features" class="py-5">
+        <div class="text-center mb-4">
+            <h2>Why Choose MoneyMind?</h2>
+            <p class="text-muted">Take control of your finances with these powerful tools:</p>
+        </div>
+        <div class="row">
+            <div class="col-md-4 text-center">
+                <i class="fas fa-chart-line fa-3x mb-3 text-primary"></i>
+                <h4>Real-Time Budget Tracking</h4>
+                <p>Easily monitor your spending and keep your budget under control.</p>
+            </div>
+            <div class="col-md-4 text-center">
+                <i class="fas fa-piggy-bank fa-3x mb-3 text-primary"></i>
+                <h4>Smart Saving Goals</h4>
+                <p>Set and achieve savings goals with personalized recommendations.</p>
+            </div>
+            <div class="col-md-4 text-center">
+                <i class="fas fa-user-shield fa-3x mb-3 text-primary"></i>
+                <h4>Secure and Private</h4>
+                <p>Your data is protected with industry-standard encryption.</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="how-it-works" class="py-5 bg-light">
+        <div class="text-center mb-4">
+            <h2>How It Works</h2>
+            <p class="text-muted">Start managing your money in 3 simple steps:</p>
+        </div>
+        <div class="row text-center">
+            <div class="col-md-4">
+                <i class="fas fa-user-plus fa-3x mb-3 text-primary"></i>
+                <h4>1. Sign Up</h4>
+                <p>Create an account in less than a minute.</p>
+            </div>
+            <div class="col-md-4">
+                <i class="fas fa-link fa-3x mb-3 text-primary"></i>
+                <h4>2. Connect Your Accounts</h4>
+                <p>Securely link your bank accounts for seamless tracking.</p>
+            </div>
+            <div class="col-md-4">
+                <i class="fas fa-coins fa-3x mb-3 text-primary"></i>
+                <h4>3. Start Saving</h4>
+                <p>Get insights and start achieving your financial goals.</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="testimonials" class="py-5">
+        <div class="text-center mb-4">
+            <h2>What Our Users Say</h2>
+        </div>
+        <div class="row">
+            <div class="col-md-4">
+                <blockquote class="blockquote">
+                    <p>"MoneyMind helped me save $500 in just 3 months. It’s a game changer!"</p>
+                    <footer class="blockquote-footer">Sarah L., Freelance Designer</footer>
+                </blockquote>
+            </div>
+            <div class="col-md-4">
+                <blockquote class="blockquote">
+                    <p>"The budgeting tools are so intuitive. I finally feel in control of my money."</p>
+                    <footer class="blockquote-footer">James W., Software Engineer</footer>
+                </blockquote>
+            </div>
+            <div class="col-md-4">
+                <blockquote class="blockquote">
+                    <p>"I love the savings goals feature. It keeps me motivated every day."</p>
+                    <footer class="blockquote-footer">Emily R., Entrepreneur</footer>
+                </blockquote>
+            </div>
+        </div>
+    </section>
+
+    <section id="signup" class="py-5 bg-primary text-white text-center">
+        <h2>Get Started Today</h2>
+        <p class="lead">Join thousands of users managing their finances with MoneyMind.</p>
+        <a class="btn btn-light btn-lg" id="login" asp-area="Identity" asp-page="/Account/Login">Sign Up Now</a>
+    </section>
+
+    
+

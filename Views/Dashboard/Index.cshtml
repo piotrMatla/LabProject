@@ -1,0 +1,137 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+    Layout = ViewBag.Layout;
+    ViewData["Title"] = "Dashboard";
+}
+
+<div class="container w-100 d-flex justify-content-between align-items-center flex-wrap">
+    <h1>@ViewData["Title"]</h1>
+    <h2>@Html.Raw(ViewBag.Message) 👋🏼</h2>
+    
+</div>
+
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-3">
+            <div class="card">
+                <div class="card-body text-center">
+                    <h5 class="card-title">Account Balance</h5>
+                    <p class="card-text"><span class="h2">$2,548.72</span></p>
+                    <i class="bi bi-piggy-bank fs-1"></i>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card">
+                <div class="card-body text-center">
+                    <h5 class="card-title">Expenses This Month</h5>
+                    <p class="card-text"><span class="h2 text-danger">$872.14</span></p>
+                    <i class="bi bi-arrow-down-circle fs-1 text-danger"></i>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card">
+                <div class="card-body text-center">
+                    <h5 class="card-title">Saved This Month</h5>
+                    <p class="card-text"><span class="h2 text-success">$1,676.58</span></p>
+                    <i class="bi bi-arrow-up-circle fs-1 text-success"></i>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card">
+                <div class="card-body text-center">
+                    <h5 class="card-title">Remaining to Goal</h5>
+                    <p class="card-text"><span class="h2">$323.42</span></p>
+                    <i class="bi bi-trophy fs-1"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mt-4">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    Expenses by Category (This Month)
+                </div>
+                <div class="card-body">
+                    <canvas id="expensesByCategoryChart"></canvas>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    Income vs. Expenses (Last 3 Months)
+                </div>
+                <div class="card-body">
+                    <canvas id="incomeVsExpensesChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mt-4">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    Recent Transactions
+                </div>
+                <div class="card-body">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Category</th>
+                                <th>Description</th>
+                                <th>Amount</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>2024-12-09</td>
+                                <td>Food</td>
+                                <td>Lunch at Restaurant</td>
+                                <td>$25.00</td>
+                            </tr>
+                            <tr>
+                                <td>2024-12-09</td>
+                                <td>Transport</td>
+                                <td>Taxi fare</td>
+                                <td>$15.00</td>
+                            </tr>
+                            <tr>
+                                <td>2024-12-09</td>
+                                <td>Entertainment</td>
+                                <td>Movie Ticket</td>
+                                <td>$12.00</td>
+                            </tr>
+                            <tr>
+                                <td>2024-12-09</td>
+                                <td>Food</td>
+                                <td>Groceries</td>
+                                <td>$40.00</td>
+                            </tr>
+                            <tr>
+                                <td>2024-12-09</td>
+                                <td>Utilities</td>
+                                <td>Electricity Bill</td>
+                                <td>$60.00</td>
+                            </tr>
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWFuzAMKJ01jxBOSeLeWGK9Qp0hW81l+C94JQhUkM/h4GPgy2QPk9wF7YVHUkXKYl" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
