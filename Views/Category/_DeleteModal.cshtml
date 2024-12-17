@@ -1,0 +1,25 @@
+﻿@model LabProject.Models.Category
+@{
+}
+
+<div class="modal fade" id="DeleteModal-@Model.Id" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header flex-wrap mb-3 justify-content-center">
+                <h5 class="d-flex modal-title mb-3 text-wrap" id="exampleModalLabel2">Are you sure you want to delete <strong class="text-danger mx-2">@(Model.Name)</strong> of yours categories?</h5>
+
+                <button type="button"
+                        class="btn-close"
+                        data-bs-dismiss="modal"
+                        aria-label="Close"></button>
+
+                <form asp-action="DeleteConfirmed">
+                    <input type="hidden" asp-for="Id" />
+                    <input type="submit" value="Delete" class="btn btn-danger" />
+                    <a class="btn btn-outline-secondary" asp-action="CategoryList">Back to List</a>
+                </form>
+
+            </div>
+        </div>
+    </div>
+</div>

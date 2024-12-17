@@ -1,0 +1,73 @@
+﻿@model LabProject.Models.Category
+
+@{
+    string idContent;
+    string headingContent;
+    string submitContent;
+
+    if (Model.Id == 0) {
+        idContent = "AddOrEditModal";
+        headingContent = "Create new category";
+        submitContent = "Create";
+    } 
+    else 
+    {
+        idContent = $"AddOrEditModal-{Model.Id}";
+        headingContent = "Edit your category";
+        submitContent = "Save";
+    }
+}
+
+
+<div class="modal fade" id="@idContent" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content">
+            <div class="modal-header flex-wrap">
+                <h5 class="modal-title mb-3" id="exampleModalLabel2">@headingContent</h5>
+                
+                <button type="button"
+                        class="btn-close"
+                        data-bs-dismiss="modal"
+                        aria-label="Close"></button>
+
+                <form id="categoryForm" asp-action="AddOrEdit" method="post">
+                    <input type="hidden" asp-for="Id" />
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                    
+                    <div class="d-flex gap-2 mb-3">
+                        <input type="radio" class="btn-check" name="Type" id="expenseRadio@(Model.Id == 0? "" : $"-{Model.Id}" )" value="Expense"
+                               asp-for="Type" />
+                        <label class="btn btn-outline-secondary" for="expenseRadio@(Model.Id == 0? "" : $"-{Model.Id}" )">
+                            Expense
+                        </label>
+                       
+                        <input type="radio" class="btn-check" name="Type" id="incomeRadio@(Model.Id == 0? "" : $"-{Model.Id}" )" value="Income"
+                        asp-for="Type"/>
+                        <label class="btn btn-outline-secondary" for="incomeRadio@(Model.Id == 0? "" : $"-{Model.Id}" )">
+                            Income
+                        </label>
+                    </div>
+
+                    <div class="form-group mb-3">
+                        <label asp-for="Name" class="control-label"></label>
+                        <input asp-for="Name" class="form-control" />
+                        <span asp-validation-for="Name" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+
+                        <input type="submit" value="@submitContent" class="btn btn-primary mb-4" />
+                    </div>
+                </form>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
