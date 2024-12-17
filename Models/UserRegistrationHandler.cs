@@ -25,7 +25,8 @@
                     new Category { Name = "Transportation", IsDefault = true, UserId = userId },
                     new Category { Name = "Travel", IsDefault = true, UserId = userId },
                     new Category { Name = "Health & Fitness", IsDefault = true, UserId = userId },
-                    new Category { Name = "Education", IsDefault = true, UserId = userId }
+                    new Category { Name = "Education", IsDefault = true, UserId = userId },
+                    new Category { Name = "Salary", IsDefault = true, UserId = userId, Type = "Income" }
             };
         }
 
