@@ -3,12 +3,21 @@
     Layout = "_Layout";
 }
 
-    <header class="text-center py-5">
-        <h1>Welcome to MoneyMind</h1>
-        <p class="lead">Your personal finance assistant to track, plan, and save smarter.</p>
-        <a href="#features" class="btn btn-primary btn-lg">Discover Features</a>
-        <a href="#signup" class="btn btn-outline-secondary btn-lg">Sign Up Now</a>
-    </header>
+
+<section class="hero_section hero h-100" data-background="" style="background-image: url(assets/images/backgrounds/hero-bg.png);">
+    <div class="container gap-2 px-5 text-white position-relative">
+        <header class="ps-5 py-5">
+            <h1 class="text-white fw-bolder">Take Control of your finances</h1>
+            <p>
+                Duis aute irure dolor in reprehenderit in voluptate velit esse cillum
+                dolore eu fugiat nulla pariatur.
+            </p>
+            <a href="#features" class="btn btn-primary btn-lg">Discover Features</a>
+            <a href="#signup" class="btn btn-secondary btn-lg">Sign Up Now</a>
+        </header>
+        <img class="hero_image" src="~/assets/images/hero-image.png" alt="Alternate Text" />
+    </div>
+</section>
 
     <section id="features" class="py-5">
         <div class="text-center mb-4">
@@ -84,7 +93,7 @@
         </div>
     </section>
 
-    <section id="signup" class="py-5 bg-primary text-white text-center">
+    <section id="signup" class="py-5 text-center">
         <h2>Get Started Today</h2>
         <p class="lead">Join thousands of users managing their finances with MoneyMind.</p>
         <a class="btn btn-light btn-lg" id="login" asp-area="Identity" asp-page="/Account/Login">Sign Up Now</a>

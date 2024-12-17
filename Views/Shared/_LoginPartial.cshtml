@@ -4,13 +4,17 @@
 @inject SignInManager<ApplicationUser> SignInManager
 @inject UserManager<ApplicationUser> UserManager
 
-<ul class="navbar-nav">
+<div class="navbar-collapse collapse justify-content-end  ms-2 mt-2">
+    <ul class="navbar-nav gap-3 align-items-md-center align-items-sm-start">
 
-    <li class="nav-item">
-        <a class="nav-link text-dark" id="register" asp-area="Identity" asp-page="/Account/Register">Register</a>
+    <li class="menu-item ">
+        
+        <a class="menu-link text-white" id="login" asp-area="Identity" asp-page="/Account/Login"><i class='bx bx-lock p-2'></i>Login</a>
     </li>
-    <li class="nav-item">
-        <a class="nav-link text-dark" id="login" asp-area="Identity" asp-page="/Account/Login">Login</a>
+    <li class="menu-item">
+        <a class="btn btn-primary " id="register" asp-area="Identity" asp-page="/Account/Register">Get started</a>
     </li>
-
+    
 </ul>
+</div>
+

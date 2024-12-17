@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Xml.Linq;
 
 namespace LabProject.Controllers
 {
@@ -13,6 +14,7 @@ namespace LabProject.Controllers
     {
         private readonly ApplicationDbContext _context;
         private readonly UserManager<ApplicationUser> _userManager;
+
         public CategoryController(ApplicationDbContext dbContext, UserManager<ApplicationUser> userManager)
         {
             _context = dbContext;
@@ -24,6 +26,7 @@ namespace LabProject.Controllers
             var user = await _userManager.GetUserAsync(User);
             if (user == null)
             {
+                
                 return RedirectToAction("Login", "Account");
             }
 
@@ -31,82 +34,121 @@ namespace LabProject.Controllers
             .Where(c => c.UserId == user.Id)
             .ToList();
 
+
             return View(categories);
         }
 
-        // GET: CategoryController/Details/5
-        public ActionResult Details(int id)
+
+        // GET: CategoryController/AddOrEdit
+        public IActionResult AddOrEdit(int? id)
         {
-            return View();
+            
+            if (id == null)
+            {                
+
+                return PartialView("_AddOrEditModal", new Category());
+            } else
+            {
+                return View(_context.Categories.Find(id));
+
+                //return PartialView("_AddOrEditModal",category);
+            }
+            
         }
 
-        // GET: CategoryController/Create
-        public ActionResult Create()
-        {
-            return View(new Category());
-        }
-
-        // POST: CategoryController/Create
+        // POST: CategoryController/AddOrEdit
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(Category category)
+        public async Task<IActionResult> AddOrEdit([Bind("Id,Name,IsDefault, UserId, Type")] Category category)
         {
             var user = await _userManager.GetUserAsync(User);
-            try
+            if (user == null)
             {
-                category.IsDefault = false;
-                category.UserId = user.Id;
+                return RedirectToAction("Login", "Account");
+            }
 
-                _context.Categories.Add(category);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(CategoryList));
-            }
-            catch
+            if (ModelState.IsValid)
             {
-                return View();
+                try
+                {
+                    category.UserId = user.Id.ToString();
+                    if (category.Id == 0)
+                    {
+                        
+                        _context.Categories.Add(category);
+                    }
+                    else
+                    {
+                        _context.Categories.Update(category);
+                    }
+
+                    await _context.SaveChangesAsync();
+                    return RedirectToAction(nameof(CategoryList));
+                }
+                catch (Exception ex)
+                {
+                    TempData["ErrorMessage"] = $"An error occurred: {ex.Message}";
+                }
             }
+            var categories = await _context.Categories
+                .Where(c => c.UserId == user.Id)
+                .ToListAsync();
+            //return View("CategoryList", categories);
+            return PartialView("_AddOrEditModal", category);
         }
 
-        // GET: CategoryController/Edit/5
+        //GET: CategoryController/Edit/5
         public ActionResult Edit(int id)
         {
-            return View();
+            return View(_context.Categories.Find(id));
         }
 
         // POST: CategoryController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
+        public async Task<IActionResult> Edit(int id, Category category)
         {
+            var user = await _userManager.GetUserAsync(User);
+            category.UserId = user.Id.ToString();
             try
             {
-                return RedirectToAction(nameof(Index));
+                _context.Update(category);
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(CategoryList));
             }
             catch
             {
-                return View();
+                return View(category);
             }
         }
 
         // GET: CategoryController/Delete/5
         public ActionResult Delete(int id)
         {
-            return View();
+            var result = _context.Categories.Find(id);
+            return View(result);
         }
 
         // POST: CategoryController/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
+        public ActionResult DeleteConfirmed(int id)
         {
+
+            var category = _context.Categories.Find(id);
             try
             {
-                return RedirectToAction(nameof(Index));
+                _context.Categories.Remove(category);
+                _context.SaveChanges();
+                return RedirectToAction(nameof(CategoryList));
             }
-            catch
+            catch (Exception ex)
             {
-                return View();
+                ModelState.AddModelError("", "ERROR");
+                return View(category);
             }
         }
+
+        
     }
 }
