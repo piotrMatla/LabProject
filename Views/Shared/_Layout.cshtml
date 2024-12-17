@@ -4,58 +4,121 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - LabProject</title>
+    <link rel="icon" type="image/x-icon" href="~/assets/favicon.ico">
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/core.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/theme-default.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/css/boxicons.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/LabProject.styles.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/page-auth.css" asp-append-version="true" />
+
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
 </head>
 <body>
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container-fluid">
-                <div class="app-brand p-2 demo">
-                    <a class="app-brand-link" asp-area="" asp-controller="Home" asp-action="Index">
-                        <img src="~/assets/logo.png" style="width: 40px;" alt="Alternate Text" />
-                        <span class="app-brand-text demo menu-text fw-bolder ms-2" style="color: #5F61E6;">MoneyMind</span>
-                    </a>
+        <section class="fixed-top navigation">
+            <div class="container">
+                <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light mb-3"> 
+                    <div class="container-fluid"> 
+                        <div class="app-brand p-2 demo"> 
+                            <a class="app-brand-link" asp-area="" asp-controller="Home" asp-action="Index">
+                                <img src="~/assets/logo.png" class="brand_custom_width" alt="Alternate Text" />
+                                <span class="app-brand-text demo text-white fw-bolder ms-2">MoneyMind</span>
+                            </a>
 
-                    <a href="javascript:void(0);" class="layout-menu-toggle menu-link text-large ms-auto d-block d-xl-none">
-                        menu
-                        <i class="bx bx-chevron-left bx-sm align-middle">Menu</i>
-                    </a>
-                </div>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                        </li>
-                    </ul>
-                </div>
-                <partial name="_LoginPartial" />
+                            <a href="javascript:void(0);" class="layout-menu-toggle menu-link text-large ms-auto d-block d-xl-none">
+                                menu
+                                <i class="bx bx-chevron-left bx-sm align-middle">Menu</i>
+                            </a>
+                        </div>
+                        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                                aria-expanded="false" aria-label="Toggle navigation">
+                            <i class='bx bx-menu text-white display-6'></i>
+                        </button>
+                        <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between ">
+                            <ul class="navbar-nav menu-inner gap-3 flex-grow-1 ms-3">
+                                <li class="menu-item">
+                                    <a class="menu-link text-white link-light" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                                </li>
+                                <li class="menu-item">
+                                    <a class="menu-link text-white" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+                                </li>
+                            </ul>
+                        </div>
+                        <partial name="_LoginPartial" />
+                    </div>
+                </nav>
             </div>
-        </nav>
+        </section>
+
+        @* <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white bg-menu-theme border-bottom box-shadow mb-3">
+        @*     <div class="container-fluid">
+        @*         <div class="app-brand p-2 demo"> *@
+        @*             <a class="app-brand-link" asp-area="" asp-controller="Home" asp-action="Index"> *@
+        @*                 <img src="~/assets/logo.png" class="brand_custom_width" alt="Alternate Text" /> *@
+        @*                 <span class="app-brand-text demo menu-text fw-bolder ms-2">MoneyMind</span> *@
+        @*             </a> *@
+
+        @*             <a href="javascript:void(0);" class="layout-menu-toggle menu-link text-large ms-auto d-block d-xl-none"> *@
+        @*                 menu *@
+        @*                 <i class="bx bx-chevron-left bx-sm align-middle">Menu</i> *@
+        @*             </a> *@
+        @*         </div> *@
+        @*         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent" *@
+        @*                 aria-expanded="false" aria-label="Toggle navigation"> *@
+        @*             <span class="navbar-toggler-icon"></span> *@
+        @*         </button> *@
+        @*         <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between "> *@
+        @*             <ul class="navbar-nav menu-inner gap-3 flex-grow-1 ms-3"> *@
+        @*                 <li class="menu-item"> *@
+        @*                     <a class="menu-link" asp-area="" asp-controller="Home" asp-action="Index">Home</a> *@
+        @*                 </li> *@
+        @*                 <li class="menu-item"> *@
+        @*                     <a class="menu-link" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a> *@
+        @*                 </li> *@
+        @*             </ul> *@
+        @*         </div> *@
+        @*         <partial name="_LoginPartial" /> *@
+        @*     </div> *@
+        @* </nav> *@
     </header>
-    <div class="container">
+    <div class="container-fluid px-0">
         <main role="main" class="pb-3">
             @RenderBody()
         </main>
     </div>
-    <footer class="py-4 text-center bg-dark text-white">
-        <p>&copy; 2024 MoneyMind. All Rights Reserved.</p>
+
+    <footer class="footer_section text-white" style="background-image: url(assets/images/backgrounds/footer-bg.png);">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-4 text-center text-lg-left mb-lg-0">
+                    <!-- logo -->
+                    <a class="app-brand-link" asp-area="" asp-controller="Home" asp-action="Index">
+                        <img src="~/assets/logo.png" class="brand_custom_width" alt="Alternate Text" />
+                        <span class="app-brand-text demo text-white fw-bolder ms-2">MoneyMind</span>
+                    </a>
+                </div>
+                <!-- footer social icon -->
+                <nav class="navbar col-12">
+                    <ul class="list-inline text-lg-right text-center social-icon">
+                        <li class="list-inline-item">
+                            <a class="text-white" href="https://github.com/piotrMatla" target="_blank"><i class='bx bxl-github'></i> Piotr Matla</a>
+                        </li>
+                        <li class="list-inline-item">
+                            <a class="text-white" href="https://github.com/klaudiamarszalek" target="_blank"><i class='bx bxl-github'></i> Klaudia Marszałek</a>
+                        </li>
+                    </ul>
+                </nav>
+                <p class="text-center mt-3">&copy; 2024 MoneyMind. All Rights Reserved.</p> 
+            </div>
+        </div>
     </footer>
+
 
     
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="~/js/site.js" ></script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>
