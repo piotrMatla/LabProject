@@ -10,21 +10,28 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - LabProject</title>
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="icon" type="image/x-icon" href="~/assets/favicon.ico">
+    @* <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" /> *@
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
+
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/core.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/theme-default.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/css/boxicons.css" asp-append-version="true" />
+    
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+
     <link rel="stylesheet" href="~/LabProject.styles.css" asp-append-version="true" />
+    
 </head>
 <body>
-    <div class="d-flex">
+    <div class="d-flex layout-wrapper">
         <aside id="layout-menu" class="layout-menu menu-vertical menu bg-menu-theme position-relative" style="max-width: 250px;">
             <nav class="sidebar">
                 <div class="app-brand p-2 demo">
                     <a href="/Dashboard" class="app-brand-link">
-                        <img src="~/assets/logo.png" class="w-25" alt="Alternate Text" />
-                        <span class="app-brand-text text-primary demo menu-text fw-bolder ms-2">MoneyMind</span>
+                        <img src="~/assets/logo.png" class="brand_custom_width" alt="Alternate Text" />
+                        <span class="app-brand-text demo menu-text fw-bolder ms-2">MoneyMind</span>
                     </a>
 
                     <a href="javascript:void(0);" class="layout-menu-toggle menu-link text-large ms-auto d-block d-xl-none">
@@ -39,20 +46,23 @@
                     <!-- MAIN LINKS -->
                     <li class="menu-item active">
 
-                        <a class="nav-link menu-link text-dark" asp-area="" asp-controller="Dashboard" asp-action="Index"><img class="p-2" src="~/assets/icons/speedometer2.svg" alt="speedometer icon" />Dashboard</a>
+                        <a class="menu-link" asp-area="" asp-controller="Dashboard" asp-action="Index"><i class='bx bxs-dashboard p-2'></i>Dashboard</a>
                     </li>
 
                     <li class="menu-item">
-                        <a class="nav-link menu-link text-dark" asp-area="" asp-controller="Category" asp-action="CategoryList"><img class="p-2" src="~/assets/icons/tags.svg" alt="tags icon" />Categories</a>
+                        <a class="menu-link" asp-area="" asp-controller="Category" asp-action="CategoryList">
+                            <i class='bx bx-purchase-tag-alt p-2'></i>
+                            Categories</a>
                     </li>
 
                     <!-- ACCOUNT LINKS -->
                     <li class="menu-header small text-uppercase">
+                        
                         <span class="menu-header-text">Account</span>
                     </li>
-                    <li class="menu-item">
+                    <li class="menu-item open">
                         <a href="javascript:void(0);" class="menu-link menu-toggle">
-                            <img class="p-2" src="~/assets/icons/tags.svg" alt="tags icon" />
+                            <i class='bx bx-user p-2'></i>
                             <div data-i18n="Account Settings">Account Settings</div>
                         </a>
                         <ul class="menu-sub">
@@ -66,14 +76,14 @@
                         </ul>
                     </li>
                     <li class="menu-item">
-                        <a id="manage" class="menu-link" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage"><img class="p-2 svg svg-illustration" src="~/assets/icons/gear.svg" alt="gear icon" />Settings</a>
+                        <a id="manage" class="menu-link" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage"><i class='bx bx-cog p-2'></i>Settings</a>
                     </li>
                     <li class="menu-item">
-                        <a class="menu-link" asp-area="" asp-controller="Home" asp-action="Privacy"><img class="p-2 svg svg-illustration" src="~/assets/icons/file-check.svg" alt="private policy icon" />Privacy</a>
+                        <a class="menu-link" asp-area="" asp-controller="Home" asp-action="Privacy"><i class='bx bx-check-shield p-2'></i>Privacy</a>
                     </li>
                     <li class="menu-item mt-auto">
                         <a href="@Url.Page("/Account/Logout", new { area = "Identity" })" class="menu-link">
-                           <img class="p-2 svg svg-illustration" src="~/assets/icons/box-arrow-right.svg" alt="private policy icon" /> Logout
+                            <i class='bx bx-log-out p-2'></i> Logout
                         </a>
                     </li>
 
@@ -89,9 +99,13 @@
     </div>
     
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    @* <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script> *@
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
     <script src="~/js/site.js" asp-append-version="true"></script>
     <script src="~/js/menu.js" asp-append-version="true"></script>
+    <script src="~/js/main.js" asp-append-version="true"></script>
+    
     <script src="~/js/helpers.js" asp-append-version="true"></script>
     <script src="~/js/bootstrap.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
