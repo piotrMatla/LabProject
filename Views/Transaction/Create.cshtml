@@ -1,0 +1,132 @@
+﻿@model LabProject.Models.Transaction
+
+@{
+    ViewData["Title"] = "Add new transaction";
+    var categories = ViewBag.Categories as List<LabProject.Models.Category>;
+}
+
+
+
+<div  class="row card p-4">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb ">
+            <li class="breadcrumb-item">
+                <a href="@Url.Action("Index", "Dashboard")">Dashboard</a>
+            </li>
+            <li class="breadcrumb-item">
+                <a asp-action="TransactionList">Transactions                                                                      </a>
+            </li>
+            <li class="breadcrumb-item active">@ViewData["Title"]</li>
+        </ol>
+    </nav>
+    <h5 class="card-header ">Add transaction</h5>
+    
+    
+    <div id="form-container" class="card-body ">
+        <form asp-action="Create" class="row form-instance transaction-form" method="post">
+
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group col">
+                <label asp-for="TransactionName" class="control-label">Transaction name</label>
+                <input asp-for="TransactionName" class="form-control" />
+                <span asp-validation-for="TransactionName" class="text-danger"></span>
+            </div>
+            <div class="form-group col">
+                <label asp-for="AdditionDate" class="control-label">Date</label>
+                <input asp-for="AdditionDate" type="date" class="form-control" />
+                <span asp-validation-for="AdditionDate" class="text-danger"></span>
+            </div>
+            <div class="form-group col">
+                <label asp-for="CategoryId" class="control-label">Category</label>
+                <select asp-for="CategoryId" class="form-select" aria-label="Default select example">
+                    @foreach (var item in categories)
+                    {
+                        <option value="@item.Id" class="fw-bold bg-secondary @(item.Type == "Expense" ? "text-danger" : "text-success")">@item.Name</option>
+                    }
+
+                </select>
+                @* <input asp-for="CategoryId" class="form-control" /> *@
+                <span asp-validation-for="CategoryId" class="text-danger"></span>
+            </div>
+            <div class="form-group col">
+                <label for="Amount" class="control-label">
+                    Amount</labe>
+                    <input type="text" name="Amount" value="0,00" class="form-control" />
+                @* <label asp-for="Amount" class="control-label"></label> *@
+                @* <input asp-for="Amount" class="form-control" /> *@
+                @* <span asp-validation-for="Amount" class="text-danger"></span> *@
+            </div>
+            <div class="form-group col">
+                <label asp-for="Note" class="control-label"></label>
+                <input asp-for="Note" class="form-control" />
+                <span asp-validation-for="Note" class="text-danger"></span>
+            </div>
+            <div class=" mb-4">
+                <button type="submit" class="btn btn-primary flex-column align-self-start">Submit All Transaction</button>
+            </div>
+        </form>
+        
+    </div>
+    <button id="add-form-btn" class="btn btn-icon btn-secondary flex-column align-self-end me-4"><i class='bx bx-plus'></i></button>
+    <div class="">
+        <input type="submit" value="Create" class="btn btn-primary" />
+    </div>
+    
+    
+</div>
+
+
+
+<script defer>
+    document.getElementById("add-form-btn").addEventListener("click", function () {
+        // Znajdź kontener z formularzami
+        const formContainer = document.getElementById("form-container");
+
+        // Pobierz pierwszy formularz (wzór do duplikowania)
+        const firstForm = document.querySelector(".form-instance");
+
+        // Sklonuj formularz
+        const clonedForm = firstForm.cloneNode(true);
+
+        // Wyczyść pola w sklonowanym formularzu
+        const inputs = clonedForm.querySelectorAll("input");
+        inputs.forEach(input => input.value = "");
+
+        // Dodaj sklonowany formularz do kontenera
+        formContainer.appendChild(clonedForm);
+    });
+
+    document.getElementById("submit-all-btn").addEventListener("click", function () {
+        // Znajdź wszystkie formularze
+        const forms = document.querySelectorAll(".transaction-form");
+
+        // Zbierz dane z każdego formularza
+        const allData = [];
+        forms.forEach(form => {
+            const formData = {};
+            const inputs = form.querySelectorAll("input");
+            inputs.forEach(input => {
+                formData[input.name] = input.value;
+            });
+            allData.push(formData);
+        });
+
+        // Prześlij dane na serwer za pomocą fetch (lub innej metody)
+        fetch('/Transaction/SaveMultiple', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(allData)
+        })
+        .then(response => response.json())
+        .then(data => {
+            alert("Transactions saved successfully!");
+            console.log(data);
+        })
+        .catch(error => console.error("Error:", error));
+    });
+</script>
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

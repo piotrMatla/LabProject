@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using LabProject.Areas.Identity.Data;
 using LabProject.Models;
+using System.Globalization;
 namespace LabProject
 {
     public class Program
@@ -23,6 +24,7 @@ namespace LabProject
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();
+
 
             var app = builder.Build();
 
