@@ -40,13 +40,25 @@ namespace LabProject.Controllers
                       c => c.Id,
                       (t, c) => new { t, c })  
                 .Where(x => x.c.Type == "Expense")  
-                .SumAsync(x => x.t.Amount);  
+                .SumAsync(x => x.t.Amount);
+
+            // Zsumowanie wszystkich przychodów użytkownika
+            var totalIncome = await _context.Transaction
+                .Where(t => t.UserId == currentUser.Id)
+                .Join(_context.Categories,
+                      t => t.CategoryId,
+                      c => c.Id,
+                      (t, c) => new { t, c })
+                .Where(x => x.c.Type == "Income")
+                .SumAsync(x => x.t.Amount);
 
 
             var FirstName = currentUser?.FirstName;
             ViewBag.Message = $"Hello, <strong class='text-primary'>{FirstName}</strong>";
             ViewBag.Layout = "_Layout_Dashboard";
             ViewBag.Expenses = totalExpenses;
+            ViewBag.Income = totalIncome;
+            ViewBag.Total = totalIncome - totalExpenses;
             return View();
         }
 
