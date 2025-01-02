@@ -14,13 +14,13 @@ using System.Globalization;
 
 namespace LabProject.Controllers
 {
-    public class TransactionController : Controller
+    public class TransactionController : BaseController 
     {
         private readonly ApplicationDbContext _context;
         private readonly UserManager<ApplicationUser> _userManager;
         private const int PageSize = 10;
 
-        public TransactionController(ApplicationDbContext dbContext, UserManager<ApplicationUser> userManager)
+        public TransactionController(ApplicationDbContext dbContext, UserManager<ApplicationUser> userManager) : base(userManager)
         {
             _context = dbContext;
             _userManager = userManager;
@@ -30,8 +30,7 @@ namespace LabProject.Controllers
         // GET: TransactionController
         public async Task<IActionResult> TransactionList(int page = 1)
         {
-            var user = await _userManager.GetUserAsync(User);
-            if (user == null)
+            if (CurrentUser == null)
             {
 
                 return RedirectToAction("Login", "Account");
@@ -59,28 +58,28 @@ namespace LabProject.Controllers
             }
             catch (CultureNotFoundException)
             {
-                // Logowanie błędu lub fallback na domyślną kulturę
                 culture = "en-US";
                 ViewBag.CurrencySymbol = new RegionInfo(culture).CurrencySymbol;
             }
 
             var totalTransactions = await _context.Transaction
-                .Where(i => i.UserId == user.Id)
+                .Where(i => i.UserId == CurrentUser.Id)
                 .CountAsync();
             var totalPages = (int)Math.Ceiling(totalTransactions / (double)PageSize);
 
+            ViewBag.CurrentCulture = culture;
             ViewBag.CurrentPage = page;
             ViewBag.TotalPages = totalPages;
 
             var transactionItems = await _context.Transaction
-               .Where(i => i.UserId == user.Id)
-               .OrderBy(t => t.AdditionDate)
+               .Where(i => i.UserId == CurrentUser.Id)
+               .OrderByDescending(t => t.TransactionId)
                .Skip((page - 1) * PageSize) 
                .Take(PageSize)
                .ToListAsync();
 
 
-            ViewBag.Categories = await _context.Categories.Where(c => c.UserId == user.Id).ToListAsync();
+            ViewBag.Categories = await _context.Categories.Where(c => c.UserId == CurrentUser.Id).ToListAsync();
             ViewBag.CountedTransactions = totalTransactions;
             return View(transactionItems);
 
@@ -95,38 +94,51 @@ namespace LabProject.Controllers
         // GET: TransactionController/Create
         public async Task<IActionResult> Create()
         {
-            var user = await _userManager.GetUserAsync(User);
-            if (user == null)
+            if (CurrentUser == null)
             {
                 return RedirectToAction("Login", "Account");
             }
 
-            ViewBag.Categories = await _context.Categories.Where(c => c.UserId == user.Id).ToListAsync();
+            ViewBag.Categories = await _context.Categories.Where(c => c.UserId == CurrentUser.Id).ToListAsync();
             return View(new Transaction());
         }
 
         [HttpPost]
-        public async Task<IActionResult> SaveMultiple([FromBody] List<Transaction> transactions)
+        public IActionResult SaveMultiple([FromBody] List<Transaction> transactions)
         {
-            var user = await _userManager.GetUserAsync(User);
+            
             if (transactions == null || !transactions.Any())
             {
                 return BadRequest("No transactions provided.");
             }
 
-            
+            var totalTransactions = _context.Transaction
+                .Where(i => i.UserId == CurrentUser.Id)
+                .Count();
+
             foreach (var transaction in transactions)
             {
-                if (ModelState.IsValid)
+                
+                if (!ModelState.IsValid)
                 {
-                    transaction.UserId = user.Id.ToString();
-                    _context.Transaction.Add(transaction);
+                    return BadRequest(new { success = false, message = "Validation failed for one or more transactions." });
                 }
+
+                if (totalTransactions >= 50)
+                {
+                    return BadRequest(new { success = false, message = "Transaction limit reached." });
+                }
+
+                
+                transaction.UserId = CurrentUser.Id;
+                _context.Transaction.Add(transaction);
+                totalTransactions++;
+                _context.SaveChanges();
+
             }
 
-             _context.SaveChangesAsync();
-
-            return Ok(new { message = "Transactions saved successfully!" });
+            
+            return Ok(new { success = true, message = "Transactions saved successfully." });
         }
 
         // POST: TransactionController/Create
@@ -135,10 +147,9 @@ namespace LabProject.Controllers
         public async Task<IActionResult> Create(Transaction transaction)
         
         {
-            var user = await _userManager.GetUserAsync(User);
             try
             {
-                transaction.UserId = user.Id.ToString();
+                transaction.UserId = CurrentUser.Id.ToString();
                 _context.Transaction.Add(transaction);
                 _context.SaveChanges();
                 return RedirectToAction(nameof(TransactionList));

@@ -23,7 +23,7 @@
     
     
     <div id="form-container" class="card-body ">
-        <form asp-action="Create" class="row form-instance transaction-form" method="post">
+        <form asp-action="Create" class="row form-instance transaction-form" method="post" data-index="0">
 
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group col">
@@ -61,15 +61,16 @@
                 <input asp-for="Note" class="form-control" />
                 <span asp-validation-for="Note" class="text-danger"></span>
             </div>
-            <div class=" mb-4">
-                <button type="submit" class="btn btn-primary flex-column align-self-start">Submit All Transaction</button>
-            </div>
+            @* <div class=" mb-4"> *@
+            @*     <button type="submit" class="btn btn-primary flex-column align-self-start">Submit All Transaction</button> *@
+            @* </div> *@
         </form>
         
     </div>
     <button id="add-form-btn" class="btn btn-icon btn-secondary flex-column align-self-end me-4"><i class='bx bx-plus'></i></button>
     <div class="">
-        <input type="submit" value="Create" class="btn btn-primary" />
+        <button id="submit-all-btn" class="btn btn-primary">Submit All Transactions</button>
+        @* <input id="submit-all-btn" type="submit" value="Create" class="btn btn-primary" /> *@
     </div>
     
     
@@ -79,54 +80,78 @@
 
 <script defer>
     document.getElementById("add-form-btn").addEventListener("click", function () {
-        // Znajdź kontener z formularzami
+
         const formContainer = document.getElementById("form-container");
 
-        // Pobierz pierwszy formularz (wzór do duplikowania)
+
         const firstForm = document.querySelector(".form-instance");
 
-        // Sklonuj formularz
+
         const clonedForm = firstForm.cloneNode(true);
 
-        // Wyczyść pola w sklonowanym formularzu
-        const inputs = clonedForm.querySelectorAll("input");
-        inputs.forEach(input => input.value = "");
+        const currentIndex = document.querySelectorAll(".transaction-form").length;
 
-        // Dodaj sklonowany formularz do kontenera
+
+        clonedForm.setAttribute("data-index", currentIndex);
+        clonedForm.querySelectorAll("input, select").forEach(input => {
+
+            input.value = "";
+
+
+            if (input.name) {
+                input.name = input.name.replace(/\[\d+\]/, `[${currentIndex}]`);
+            }
+            if (input.id) {
+                input.id = input.id.replace(/\_\d+/, `_${currentIndex}`);
+            }
+        });
+
+  
         formContainer.appendChild(clonedForm);
     });
 
-    document.getElementById("submit-all-btn").addEventListener("click", function () {
-        // Znajdź wszystkie formularze
+        document.getElementById("submit-all-btn").addEventListener("click", function () {
         const forms = document.querySelectorAll(".transaction-form");
 
-        // Zbierz dane z każdego formularza
         const allData = [];
         forms.forEach(form => {
             const formData = {};
-            const inputs = form.querySelectorAll("input");
+            const inputs = form.querySelectorAll("input, select");
             inputs.forEach(input => {
-                formData[input.name] = input.value;
+                let value = input.value;
+
+              
+                if (input.name.toLowerCase().includes("amount")) {
+                    value = value.replace(",", ".");
+                }
+
+                formData[input.name] = value;
             });
             allData.push(formData);
         });
 
-        // Prześlij dane na serwer za pomocą fetch (lub innej metody)
-        fetch('/Transaction/SaveMultiple', {
+            fetch('/Transaction/SaveMultiple', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify(allData)
         })
-        .then(response => response.json())
-        .then(data => {
-            alert("Transactions saved successfully!");
-            console.log(data);
+        .then(response => {
+            if (response.ok) {
+                window.location.href = '/Transaction/TransactionList';
+            } else {
+                window.location.href = '/Transaction/TransactionList';
+                return response.json().then(data => {
+                    throw new Error(data.message || "Failed to save transactions.");
+                });
+            }
         })
-        .catch(error => console.error("Error:", error));
+        .catch(error => alert(error.message));
     });
+
 </script>
+
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }

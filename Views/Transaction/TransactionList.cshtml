@@ -9,6 +9,7 @@
     currencyCustomFormat.CurrencyGroupSeparator = " ";
     currencyCustomFormat.CurrencySymbol = ViewBag.CurrencySymbol == "£" ? "£ " : " " + ViewBag.CurrencySymbol;
     currencyCustomFormat.CurrencyPositivePattern = ViewBag.CurrencySymbol == "£" ? 0 : 1;
+    currencyCustomFormat.CurrencyDecimalSeparator = ViewBag.CurrentCulture == "pl-PL" ? "," : ".";
 
     var categories = ViewBag.Categories as List<LabProject.Models.Category>;
     int currentPage = ViewBag.CurrentPage;
@@ -96,7 +97,7 @@
                                 @item.Amount.ToString("C", currencyCustomFormat)
                             </td>
                             <td>
-                                @if (item.Note != null)
+                                @if (!string.IsNullOrEmpty(item.Note))
                                 {
                                     <a asp-action="Details" asp-route-id="@item.TransactionId">Details</a>
                                    
@@ -154,7 +155,5 @@
         </nav>
     </div>
 </div>
-<button type="button" class="btn btn-primary" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="top" data-bs-html="true" title="" data-bs-original-title="<i class='bx bx-bell bx-xs' ></i> <span>Tooltip on top</span>">
-    Top
-</button>
+
 

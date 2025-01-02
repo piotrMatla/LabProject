@@ -4,6 +4,7 @@ using LabProject.Binders;
 
 namespace LabProject.Models
 {
+
     public class Transaction
     {
         [Key]
