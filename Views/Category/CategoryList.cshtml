@@ -43,7 +43,7 @@
 
                                 <a asp-action="AddOrEdit" asp-route-id="@item.Id" data-bs-toggle="modal"
                                    data-bs-target="#AddOrEditModal-@(item.Id)" data-url="@Url.Action($"AddOrEdit/{item.Id}")"><i class='bx bxs-edit m-2 h5 text-primary'></i></a>
-                                @await Html.PartialAsync("_AddOrEditModal", item)|
+                                @await Html.PartialAsync("_AddOrEditModal", item)
                                 <a asp-action="Delete" asp-route-id="@item.Id" data-bs-toggle="modal"
                                    data-bs-target="@("#DeleteModal-"+item.Id)"><i class='bx bx-trash m-2 h5 text-danger'></i></a>
                                 @await Html.PartialAsync("_DeleteModal", item)
@@ -67,4 +67,4 @@
 </div>
 
 
-@* @await Html.PartialAsync("_AddOrEditModal") *@
+
