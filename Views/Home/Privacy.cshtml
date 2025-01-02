@@ -4,65 +4,111 @@
 @inject SignInManager<ApplicationUser> SignInManager
 
 @{
-    ViewData["Title"] = "Privacy Policy";
+    //ViewData["Title"] = "Privacy Policy";
     Layout = SignInManager.IsSignedIn(User) ? "_Layout_Dashboard" : "_Layout";
 }
 
 
-<h2>@ViewData["Title"]</h2>
+<!--<h2>@ViewData["Title"]</h2>-->
+<section id="privacy-policy" class="py-5 bg-light">
+    <div class="container">
+        <div class="text-center mb-4">
+            <h2>Privacy Policy</h2>
+            <p class="text-muted">Your privacy is important to us. Here’s how we handle your personal data:</p>
+        </div>
 
-<p><strong>1. Administrator of Personal Data</strong></p>
-<p>The administrator of personal data is <strong>MoneyMind Sp. z o.o.</strong>, based in <strong>Św. Filipa 17, 31-150 Kraków</strong>, Poland. For any inquiries regarding your personal data, you can contact us at <a href="mailto:privacy@moneymind.com.pl">privacy@moneymind.com.pl</a>.</p>
+        <div class="mb-4">
+            <i class="fas fa-user-shield fa-3x mb-3 text-primary"></i>
+            <h4>1. Administrator of Personal Data</h4>
+            <p>The administrator of personal data is <strong>MoneyMind Sp. z o.o.</strong>, based in <strong>Św. Filipa 17, 31-150 Kraków</strong>, Poland. For any inquiries regarding your personal data, you can contact us at <a href="mailto:privacy@moneymind.com.pl">privacy@moneymind.com.pl</a>.</p>
+        </div>
 
-<p><strong>2. Collected Personal Data</strong></p>
-<p>We collect the following personal data from users:</p>
-<ul>
-    <li>First and last name</li>
-    <li>Email address</li>
-    <li>Payment information</li>
-</ul>
+        <div class="mb-4">
+            <i class="fas fa-database fa-3x mb-3 text-primary"></i>
+            <h4>2. Collected Personal Data</h4>
+            <p>We collect the following personal data from users:</p>
+            <ul>
+                <li>First and last name</li>
+                <li>Email address</li>
+                <li>Payment information</li>
+            </ul>
+        </div>
 
-<p><strong>3. Purpose of Data Processing</strong></p>
-<p>Your personal data is collected for the following purposes:</p>
-<ul>
-    <li>To create payment statistics and provide assistance in managing your household budget.</li>
-    <li>To provide services related to your MoneyMind account and enhance your user experience.</li>
-</ul>
+        <div class="mb-4">
+            <i class="fas fa-cogs fa-3x mb-3 text-primary"></i>
+            <h4>3. Purpose of Data Processing</h4>
+            <p>Your personal data is collected for the following purposes:</p>
+            <ul>
+                <li>To create payment statistics and assist with managing your household budget.</li>
+                <li>To provide services related to your MoneyMind account and enhance your user experience.</li>
+            </ul>
+        </div>
 
-<p><strong>4. Legal Basis for Data Processing</strong></p>
-<p>By creating an account on MoneyMind, you give your explicit consent to the collection and processing of your personal data as outlined in this privacy policy.</p>
+        <div class="mb-4">
+            <i class="fas fa-gavel fa-3x mb-3 text-primary"></i>
+            <h4>4. Legal Basis for Data Processing</h4>
+            <p>By creating an account on MoneyMind, you give your explicit consent to the collection and processing of your personal data as outlined in this privacy policy.</p>
+        </div>
 
-<p><strong>5. Cookies</strong></p>
-<p>Our website does not use cookies. If, in the future, we decide to implement cookies, we will update this policy accordingly.</p>
+        <div class="mb-4">
+            <i class="fas fa-cookie-bite fa-3x mb-3 text-primary"></i>
+            <h4>5. Cookies</h4>
+            <p>Our website does not use cookies. If, in the future, we decide to implement cookies, we will update this policy accordingly.</p>
+        </div>
 
-<p><strong>6. Data Sharing</strong></p>
-<p>Your personal data is not shared with third parties. We do not sell or rent your personal data to other companies.</p>
+        <div class="mb-4">
+            <i class="fas fa-users fa-3x mb-3 text-primary"></i>
+            <h4>6. Data Sharing</h4>
+            <p>Your personal data is not shared with third parties. We do not sell or rent your personal data to other companies.</p>
+        </div>
 
-<p><strong>7. International Data Transfers</strong></p>
-<p>We do not transfer your personal data outside of the European Economic Area (EEA).</p>
+        <div class="mb-4">
+            <i class="fas fa-globe fa-3x mb-3 text-primary"></i>
+            <h4>7. International Data Transfers</h4>
+            <p>We do not transfer your personal data outside of the European Economic Area (EEA).</p>
+        </div>
 
-<p><strong>8. Data Retention</strong></p>
-<p>Your personal data will be retained indefinitely, unless you request its deletion. You have the right to ask us to delete your personal data at any time. We will comply with your request in accordance with applicable legal requirements.</p>
+        <div class="mb-4">
+            <i class="fas fa-clock fa-3x mb-3 text-primary"></i>
+            <h4>8. Data Retention</h4>
+            <p>Your personal data will be retained indefinitely unless you request its deletion. You have the right to ask us to delete your personal data at any time.</p>
+        </div>
 
-<p><strong>9. Your Rights</strong></p>
-<p>As a user, you have the following rights concerning your personal data:</p>
-<ul>
-    <li>The right to access your data.</li>
-    <li>The right to rectify or update your data.</li>
-    <li>The right to request the deletion of your data (the right to be forgotten).</li>
-    <li>The right to limit the processing of your data.</li>
-    <li>The right to data portability.</li>
-    <li>The right to withdraw your consent at any time, without affecting the legality of processing based on consent before its withdrawal.</li>
-    <li>The right to object to the processing of your data.</li>
-</ul>
+        <div class="mb-4">
+            <i class="fas fa-shield-alt fa-3x mb-3 text-primary"></i>
+            <h4>9. Your Rights</h4>
+            <p>As a user, you have the following rights concerning your personal data:</p>
+            <ul>
+                <li>The right to access your data.</li>
+                <li>The right to rectify or update your data.</li>
+                <li>The right to request the deletion of your data.</li>
+                <li>The right to limit the processing of your data.</li>
+                <li>The right to data portability.</li>
+                <li>The right to withdraw your consent at any time.</li>
+                <li>The right to object to the processing of your data.</li>
+            </ul>
+        </div>
 
-<p><strong>10. Data Security</strong></p>
-<p>We implement appropriate technical and organizational measures to protect your personal data against unauthorized access, alteration, disclosure, or destruction.</p>
+        <div class="mb-4">
+            <i class="fas fa-lock fa-3x mb-3 text-primary"></i>
+            <h4>10. Data Security</h4>
+            <p>We implement appropriate technical and organizational measures to protect your personal data against unauthorized access, alteration, disclosure, or destruction.</p>
+        </div>
 
-<p><strong>11. Changes to This Privacy Policy</strong></p>
-<p>We may update this privacy policy from time to time. Any changes will be posted on this page, and we will notify you if significant changes occur. Please review this policy periodically to stay informed about how we protect your information.</p>
+        <div class="mb-4">
+            <i class="fas fa-sync-alt fa-3x mb-3 text-primary"></i>
+            <h4>11. Changes to This Privacy Policy</h4>
+            <p>We may update this privacy policy from time to time. Any changes will be posted on this page, and we will notify you if significant changes occur.</p>
+        </div>
 
-<p><strong>12. Contact Information</strong></p>
-<p>If you have any questions or concerns about this privacy policy or the processing of your personal data, please contact us at <a href="mailto:privacy@moneymind.com.pl">privacy@moneymind.com.pl</a>.</p>
+        <div class="mb-4">
+            <i class="fas fa-envelope fa-3x mb-3 text-primary"></i>
+            <h4>12. Contact Information</h4>
+            <p>If you have any questions or concerns about this privacy policy or the processing of your personal data, please contact us at <a href="mailto:privacy@moneymind.com.pl">privacy@moneymind.com.pl</a>.</p>
+        </div>
 
-<p><strong>Date of Last Update:</strong> 14.12.2024</p>
+        <div class="text-center mt-5">
+            <p><strong>Date of Last Update:</strong> 14.12.2024</p>
+        </div>
+    </div>
+</section>
