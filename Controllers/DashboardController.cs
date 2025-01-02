@@ -52,12 +52,34 @@ namespace LabProject.Controllers
                 .Where(x => x.c.Type == "Income")
                 .SumAsync(x => x.t.Amount);
 
+            // Zsumowanie wszystkich przychodów użytkownika z ostatnich 30 dni
+            var monthIncome = await _context.Transaction
+                .Where(t => t.UserId == currentUser.Id)
+                .Where(t => t.AdditionDate >= DateTime.Now.AddDays(-30)) // Dodanie warunku daty
+                .Join(_context.Categories,
+                      t => t.CategoryId,
+                      c => c.Id,
+                      (t, c) => new { t, c })
+                .Where(x => x.c.Type == "Income")
+                .SumAsync(x => x.t.Amount);
+
+            // Zsumowanie wszystkich wydatków użytkownika z ostatnich 30 dni
+            var monthExpenses = await _context.Transaction
+                .Where(t => t.UserId == currentUser.Id)
+                .Where(t => t.AdditionDate >= DateTime.Now.AddDays(-30)) // Dodanie warunku daty
+                .Join(_context.Categories,
+                      t => t.CategoryId,
+                      c => c.Id,
+                      (t, c) => new { t, c })
+                .Where(x => x.c.Type == "Expense")
+                .SumAsync(x => x.t.Amount);
+
 
             var FirstName = currentUser?.FirstName;
             ViewBag.Message = $"Hello, <strong class='text-primary'>{FirstName}</strong>";
             ViewBag.Layout = "_Layout_Dashboard";
-            ViewBag.Expenses = totalExpenses;
-            ViewBag.Income = totalIncome;
+            ViewBag.Expenses = monthExpenses;
+            ViewBag.Income = monthIncome;
             ViewBag.Total = totalIncome - totalExpenses;
             return View();
         }
