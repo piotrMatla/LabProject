@@ -194,8 +194,9 @@ namespace LabProject.Controllers
             catch (Exception ex)
             {
                 ModelState.AddModelError("", "ERROR");
-                return PartialView("_TransactionDeleteModal", transaction);
+                return PartialView("DeleteModal", transaction);
             }
+            return RedirectToAction(nameof(TransactionList));
         }
     }
 }
