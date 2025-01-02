@@ -1,4 +1,5 @@
 ﻿using LabProject.Areas.Identity.Data;
+using LabProject.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
@@ -8,6 +9,10 @@ namespace LabProject.Areas.Identity.Data;
 
 public class LabProjectDbContext : IdentityDbContext<ApplicationUser>
 {
+ //test
+    public DbSet<Transaction> Transaction { get; set; }
+    public DbSet<Category> Categories { get; set; }
+//test>
     public LabProjectDbContext(DbContextOptions<LabProjectDbContext> options)
         : base(options)
     {

@@ -93,7 +93,6 @@ namespace LabProject.Controllers
             var categories = await _context.Categories
                 .Where(c => c.UserId == user.Id)
                 .ToListAsync();
-            //return View("CategoryList", categories);
             return PartialView("_AddOrEditModal", category);
         }
 

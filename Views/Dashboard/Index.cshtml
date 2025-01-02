@@ -4,6 +4,7 @@
 @{
     Layout = ViewBag.Layout;
     ViewData["Title"] = "Dashboard";
+    var exp = ViewBag.Expenses;
 }
 
 <div class="container w-100 d-flex justify-content-between align-items-center flex-wrap">
@@ -19,7 +20,7 @@
             <div class="card">
                 <div class="card-body text-center">
                     <h5 class="card-title">Account Balance</h5>
-                    <p class="card-text"><span class="h2">$2,548.72</span></p>
+                    <p class="card-text"><span class="h2">$@ViewData["Total"]</span></p>
                     <i class="bi bi-piggy-bank fs-1"></i>
                 </div>
             </div>
@@ -28,7 +29,7 @@
             <div class="card">
                 <div class="card-body text-center">
                     <h5 class="card-title">Expenses This Month</h5>
-                    <p class="card-text"><span class="h2 text-danger">$872.14</span></p>
+                    <p class="card-text"><span class="h2 text-danger">$@ViewData["Expenses"]</span></p>
                     <i class="bi bi-arrow-down-circle fs-1 text-danger"></i>
                 </div>
             </div>
@@ -36,8 +37,8 @@
         <div class="col-md-3">
             <div class="card">
                 <div class="card-body text-center">
-                    <h5 class="card-title">Saved This Month</h5>
-                    <p class="card-text"><span class="h2 text-success">$1,676.58</span></p>
+                    <h5 class="card-title">Income This Month</h5>
+                    <p class="card-text"><span class="h2 text-success">$@ViewData["Income"]</span></p>
                     <i class="bi bi-arrow-up-circle fs-1 text-success"></i>
                 </div>
             </div>
