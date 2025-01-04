@@ -27,6 +27,7 @@ namespace LabProject.Controllers
         {
             if (CurrentUser == null)
             {
+                
                 return RedirectToAction("Login", "Account");
             }
 
@@ -49,6 +50,7 @@ namespace LabProject.Controllers
             return category == null ? NotFound() : View(category);
         }
 
+        // POST: CategoryController/AddOrEdit
         // POST: CategoryController/AddOrEdit
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -105,6 +107,7 @@ namespace LabProject.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, Category category)
+        public async Task<IActionResult> Edit(int id, Category category)
         {
             category.UserId = CurrentUser.Id.ToString();
             try
@@ -112,9 +115,13 @@ namespace LabProject.Controllers
                 _context.Update(category);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(CategoryList));
+                _context.Update(category);
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(CategoryList));
             }
             catch
             {
+                return View(category);
                 return View(category);
             }
         }
@@ -145,7 +152,11 @@ namespace LabProject.Controllers
             {
                 ModelState.AddModelError("", "ERROR");
                 return View(category);
+                ModelState.AddModelError("", "ERROR");
+                return View(category);
             }
         }
+
+        
     }
 }
