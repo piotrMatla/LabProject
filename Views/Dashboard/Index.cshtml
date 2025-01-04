@@ -9,7 +9,7 @@
     ViewData["Title"] = "Dashboard";
     var exp = ViewBag.Expenses;
 
-    
+
 }
 
 <div class="container w-100 d-flex justify-content-between align-items-center flex-wrap">
@@ -18,7 +18,7 @@
         <h1 class="m-0 ms-2 fw-semibold fs-2">@ViewData["Title"]</h1>
     </div>
     @* <h2>@Html.Raw(ViewBag.Message) 👋🏼</h2> *@
-    
+
 </div>
 
 
@@ -67,7 +67,7 @@
             <div class="card">
                 <div class="card-header">
                     <h5 class="card-title m-0 me-2">Expenses by Category (This Month)</h5>
-                    
+
                 </div>
                 <div class="card-body">
                     <canvas id="expensesByCategoryChart"></canvas>
@@ -78,7 +78,7 @@
             <div class="card">
                 <div class="card-header">
                     <h5 class="card-title m-0 me-2">Income vs. Expenses (Last 3 Months)</h5>
-                    
+
                 </div>
                 <div class="card-body">
                     <canvas id="incomeVsExpensesChart"></canvas>
@@ -86,8 +86,25 @@
             </div>
         </div>
     </div>
+    @if (!User.IsInRole("UserPremium"))
+    {
+        <div class="row mt-4">
+            <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title m-0 me-2">Wanna see more?</h3>
 
-@if (User.IsInRole("UserPremium")){
+                </div>
+                <div class="card-body">
+                        <p>Unlock the full potential of your experience with our Premium subscription! Gain exclusive access to detailed transaction summaries and a suite of advanced features designed to enhance your journey. Don’t miss out – upgrade today and take control of your data like never before!</p>
+                        <button action="">Buy Premium</button>
+                
+                </div>
+        </div>
+        </div>
+        </div>
+    }
+    @if (User.IsInRole("UserPremium")){
         <div class="row mt-4">
             <div class="col-md-12">
                 <div class="card">
