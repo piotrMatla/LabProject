@@ -8,6 +8,9 @@ using System.Drawing.Drawing2D;
 using System.Threading.Tasks;
 using System.Linq;
 using static System.Net.Mime.MediaTypeNames;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication;
+using System.Security.Claims;
 
 
 namespace LabProject.Controllers
@@ -17,11 +20,13 @@ namespace LabProject.Controllers
     {
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly LabProjectDbContext _context;
+        private readonly SignInManager<ApplicationUser> _signInManager;
 
         public DashboardController(UserManager<ApplicationUser> userManager, LabProjectDbContext context)
         {
             _userManager = userManager;
             _context = context ?? throw new ArgumentNullException(nameof(context)); // Dodatkowa kontrola null
+            //_signInManager = signInManager;
         }
         public async Task<IActionResult> Index()
         {
@@ -84,7 +89,35 @@ namespace LabProject.Controllers
             return View();
         }
 
-        
+        public async Task<IActionResult> AssignPremiumRole()
+        {
+            var currentUser = await _userManager.GetUserAsync(User);
+
+            if (currentUser != null)
+            {
+                // Dodajemy rolę UserPremium do użytkownika
+                var result = await _userManager.AddToRoleAsync(currentUser, "UserPremium");
+
+                if (result.Succeeded)
+                {
+                    // Przekierowanie do widoku Premium
+                    return RedirectToAction("Premium");
+                }
+                else
+                {
+                    // W przypadku błędu, np. gdy rola nie została przydzielona
+                    return RedirectToAction("Error");
+                }
+            }
+
+            return RedirectToAction("Error");
+        }
+
+        // GET: DashboardController/Details/5
+        public ActionResult Premium()
+        {
+            return View();
+        }
 
         // GET: DashboardController/Details/5
         public ActionResult Details(int id)
