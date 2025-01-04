@@ -1,12 +1,12 @@
 ﻿using LabProject.Areas.Identity.Data;
 using LabProject.Models;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using System.Xml.Linq;
-using System.Xml.Linq;
+using System;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace LabProject.Controllers
 {
@@ -21,52 +21,38 @@ namespace LabProject.Controllers
             _context = dbContext;
             _userManager = userManager;
         }
+
         // GET: CategoryController
         public async Task<IActionResult> CategoryList()
         {
             if (CurrentUser == null)
             {
-                
-                
                 return RedirectToAction("Login", "Account");
             }
 
-            var categories = _context.Categories
-            .Where(c => c.UserId == CurrentUser.Id)
-            .ToList();
-
-
+            var categories = await _context.Categories
+                .Where(c => c.UserId == CurrentUser.Id)
+                .ToListAsync();
 
             return View(categories);
         }
 
-
-        // GET: CategoryController/AddOrEdit
-        public IActionResult AddOrEdit(int? id)
-
         // GET: CategoryController/AddOrEdit
         public IActionResult AddOrEdit(int? id)
         {
-            
             if (id == null)
-            {                
-
-                return PartialView("_AddOrEditModal", new Category());
-            } else
             {
-                return View(_context.Categories.Find(id));
-
-                //return PartialView("_AddOrEditModal",category);
+                return PartialView("_AddOrEditModal", new Category());
             }
-            
+
+            var category = _context.Categories.Find(id);
+            return category == null ? NotFound() : View(category);
         }
 
         // POST: CategoryController/AddOrEdit
-        // POST: CategoryController/AddOrEdit
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> AddOrEdit([Bind("Id,Name,IsDefault, UserId, Type")] Category category)
-        public async Task<IActionResult> AddOrEdit([Bind("Id,Name,IsDefault, UserId, Type")] Category category)
+        public async Task<IActionResult> AddOrEdit([Bind("Id,Name,IsDefault,UserId,Type")] Category category)
         {
             if (CurrentUser == null)
             {
@@ -74,8 +60,8 @@ namespace LabProject.Controllers
             }
 
             var existingCategory = await _context.Categories
-        .Where(c => c.UserId == CurrentUser.Id && c.Name.ToLower() == category.Name.ToLower())
-        .FirstOrDefaultAsync();
+                .Where(c => c.UserId == CurrentUser.Id && c.Name.ToLower() == category.Name.ToLower())
+                .FirstOrDefaultAsync();
 
             if (existingCategory != null && existingCategory.Type == category.Type)
             {
@@ -89,7 +75,6 @@ namespace LabProject.Controllers
                     category.UserId = CurrentUser.Id.ToString();
                     if (category.Id == 0)
                     {
-                        
                         _context.Categories.Add(category);
                     }
                     else
@@ -105,18 +90,15 @@ namespace LabProject.Controllers
                     TempData["ErrorMessage"] = $"An error occurred: {ex.Message}";
                 }
             }
-            var categories = await _context.Categories
-                .Where(c => c.UserId == CurrentUser.Id)
-                .ToListAsync();
+
             return PartialView("_AddOrEditModal", category);
         }
 
-        //GET: CategoryController/Edit/5
-        //GET: CategoryController/Edit/5
-        public ActionResult Edit(int id)
+        // GET: CategoryController/Edit/5
+        public IActionResult Edit(int id)
         {
-            return View(_context.Categories.Find(id));
-            return View(_context.Categories.Find(id));
+            var category = _context.Categories.Find(id);
+            return category == null ? NotFound() : View(category);
         }
 
         // POST: CategoryController/Edit/5
@@ -134,41 +116,36 @@ namespace LabProject.Controllers
             catch
             {
                 return View(category);
-                return View(category);
             }
         }
 
         // GET: CategoryController/Delete/5
-        public ActionResult Delete(int id)
+        public IActionResult Delete(int id)
         {
-            var result = _context.Categories.Find(id);
-            return View(result);
-            var result = _context.Categories.Find(id);
-            return View(result);
+            var category = _context.Categories.Find(id);
+            return category == null ? NotFound() : View(category);
         }
 
         // POST: CategoryController/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirmed(int id)
+        public IActionResult DeleteConfirmed(int id)
         {
-
             var category = _context.Categories.Find(id);
             try
             {
-                _context.Categories.Remove(category);
-                _context.SaveChanges();
+                if (category != null)
+                {
+                    _context.Categories.Remove(category);
+                    _context.SaveChanges();
+                }
                 return RedirectToAction(nameof(CategoryList));
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 ModelState.AddModelError("", "ERROR");
                 return View(category);
             }
         }
-
-        
-
-        
     }
 }
