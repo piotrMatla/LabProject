@@ -5,6 +5,7 @@
 }
 
 <partial name="_AddOrEditModal" model="new LabProject.Models.Category()" />
+<<<<<<< Updated upstream
 
 
 <div class="card p-4">
@@ -78,3 +79,55 @@
 
 
 
+=======
+
+
+<div class="card">
+    <h5 class="card-header">Your categories</h5>
+    <button type="button"
+            class="d-flex btn btn-primary me-auto ms-3 mb-3 align-items-center"
+            data-bs-toggle="modal"
+            data-bs-target="#AddOrEditModal">
+        <i class='bx bx-plus pe-2'></i>new category
+    </button>
+    
+    <div class="table-responsive text-nowrap">
+        <table class="table-responsive table table-striped">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Type</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody class="table-border-bottom-0">
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Name)
+                        </td>
+                        <td>
+                            <span class="badge @(item.Type == "Income"? "bg-label-success" : "bg-label-danger" ) me-1">@Html.DisplayFor(modelItem => item.Type)</span>
+                        </td>
+
+                        <td>
+
+                            <a asp-action="AddOrEdit" asp-route-id="@item.Id" data-bs-toggle="modal"
+                               data-bs-target="#AddOrEditModal-@(item.Id)" data-url="@Url.Action($"AddOrEdit/{item.Id}")"><i class='bx bxs-edit m-2 h5 text-primary'></i></a>
+                            @await Html.PartialAsync("_AddOrEditModal", item)|
+                            <a asp-action="Delete" asp-route-id="@item.Id" data-bs-toggle="modal"
+                               data-bs-target="@("#DeleteModal-"+item.Id)"><i class='bx bx-trash m-2 h5 text-danger'></i></a>
+                               @await Html.PartialAsync("_DeleteModal", item)
+                        </td>
+                    </tr>
+                }
+          
+            </tbody>
+        </table>
+    </div>
+</div>
+
+
+@* @await Html.PartialAsync("_AddOrEditModal") *@
+>>>>>>> Stashed changes
