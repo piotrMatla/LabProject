@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Xml.Linq;
+using System.Xml.Linq;
 
 namespace LabProject.Controllers
 {
@@ -26,6 +27,7 @@ namespace LabProject.Controllers
             if (CurrentUser == null)
             {
                 
+                
                 return RedirectToAction("Login", "Account");
             }
 
@@ -34,9 +36,13 @@ namespace LabProject.Controllers
             .ToList();
 
 
+
             return View(categories);
         }
 
+
+        // GET: CategoryController/AddOrEdit
+        public IActionResult AddOrEdit(int? id)
 
         // GET: CategoryController/AddOrEdit
         public IActionResult AddOrEdit(int? id)
@@ -56,8 +62,10 @@ namespace LabProject.Controllers
         }
 
         // POST: CategoryController/AddOrEdit
+        // POST: CategoryController/AddOrEdit
         [HttpPost]
         [ValidateAntiForgeryToken]
+        public async Task<IActionResult> AddOrEdit([Bind("Id,Name,IsDefault, UserId, Type")] Category category)
         public async Task<IActionResult> AddOrEdit([Bind("Id,Name,IsDefault, UserId, Type")] Category category)
         {
             if (CurrentUser == null)
@@ -104,8 +112,10 @@ namespace LabProject.Controllers
         }
 
         //GET: CategoryController/Edit/5
+        //GET: CategoryController/Edit/5
         public ActionResult Edit(int id)
         {
+            return View(_context.Categories.Find(id));
             return View(_context.Categories.Find(id));
         }
 
@@ -124,12 +134,15 @@ namespace LabProject.Controllers
             catch
             {
                 return View(category);
+                return View(category);
             }
         }
 
         // GET: CategoryController/Delete/5
         public ActionResult Delete(int id)
         {
+            var result = _context.Categories.Find(id);
+            return View(result);
             var result = _context.Categories.Find(id);
             return View(result);
         }
@@ -153,6 +166,8 @@ namespace LabProject.Controllers
                 return View(category);
             }
         }
+
+        
 
         
     }
