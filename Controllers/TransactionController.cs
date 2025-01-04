@@ -103,6 +103,7 @@ namespace LabProject.Controllers
             return View(new Transaction());
         }
 
+        // POST: TransactionController/Create
         [HttpPost]
         public IActionResult SaveMultiple([FromBody] List<Transaction> transactions)
         {
@@ -141,44 +142,33 @@ namespace LabProject.Controllers
             return Ok(new { success = true, message = "Transactions saved successfully." });
         }
 
-        // POST: TransactionController/Create
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(Transaction transaction)
-        
-        {
-            try
-            {
-                transaction.UserId = CurrentUser.Id.ToString();
-                _context.Transaction.Add(transaction);
-                _context.SaveChanges();
-                return RedirectToAction(nameof(TransactionList));
-            }
-            catch
-            {
-                return View();
-            }
-        }
-
         // GET: TransactionController/Edit/5
         public ActionResult Edit(int id)
         {
-            return View();
+            return View(_context.Categories.Find(id));
         }
 
         // POST: TransactionController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
+        public async Task<IActionResult> Edit([Bind("TransactionId,TransactionName,CategoryId, UserId, Amount, Note, AdditionDate")] Transaction transaction)
         {
-            try
+            if (ModelState.IsValid)
             {
-                return RedirectToAction(nameof(Index));
+                try
+                {
+                    transaction.UserId = CurrentUser.Id.ToString();
+                   _context.Transaction.Update(transaction);
+                    await _context.SaveChangesAsync();
+                    return RedirectToAction(nameof(TransactionList));
+                }
+                catch (Exception ex)
+                {
+                    TempData["ErrorMessage"] = $"An error occurred: {ex.Message}";
+                    return PartialView("EditModal", transaction);
+                }
             }
-            catch
-            {
-                return View();
-            }
+            return PartialView("EditModal", transaction);
         }
 
         // GET: TransactionController/Delete/5
@@ -204,8 +194,9 @@ namespace LabProject.Controllers
             catch (Exception ex)
             {
                 ModelState.AddModelError("", "ERROR");
-                return PartialView("_TransactionDeleteModal", transaction);
+                return PartialView("DeleteModal", transaction);
             }
+            return RedirectToAction(nameof(TransactionList));
         }
     }
 }

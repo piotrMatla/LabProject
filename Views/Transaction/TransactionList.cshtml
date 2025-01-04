@@ -36,6 +36,7 @@
     }
 }
 
+
 <div class="card p-4">
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb ">
@@ -99,15 +100,30 @@
                             <td>
                                 @if (!string.IsNullOrEmpty(item.Note))
                                 {
-                                    <a asp-action="Details" asp-route-id="@item.TransactionId">Details</a>
-                                   
+                                    <div class="col">
+                                        <a href="#"
+                                           class="btn btn-link text-nowrap"
+                                           data-bs-toggle="popover"
+                                           data-bs-offset="0,14"
+                                           data-bs-placement="top"
+                                           data-bs-html="true"
+                                           data-bs-content="<p class='p-2'>@item.Note</p>"
+                                           aria-describedby="popover97906">
+                                            Details
+                                        </a>
+                                    </div>
                                 }
 
                             </td>
                             <td>
-                                <a asp-action="Edit" asp-route-id="@item.TransactionId"><i class='bx bxs-edit m-2 h5 text-primary'></i></a>
+                                @* Edit button *@
+                                <a asp-action="Edit" asp-route-id="@item.TransactionId" data-bs-toggle="modal"
+                                   data-bs-target="#EditModal-@(item.TransactionId)" data-url="@Url.Action($"Edit/{item.TransactionId}")"><i class='bx bxs-edit m-2 h5 text-primary'></i></a>
+                                @await Html.PartialAsync("EditModal", item)
+
+                                @* Delete button *@
                                 <a asp-action="Delete" asp-route-id="@item.TransactionId" data-bs-toggle="modal" data-bs-target="@("#DeleteModal-"+item.TransactionId)"><i class='bx bx-trash m-2 h5 text-danger'></i></a>
-                                @await Html.PartialAsync("_TransactionDeleteModal", item)
+                                @await Html.PartialAsync("DeleteModal", item)
                             </td>
                         </tr>
                     }
@@ -156,4 +172,11 @@
     </div>
 </div>
 
-
+<script>
+        document.addEventListener('DOMContentLoaded', function () {
+        var popoverTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="popover"]'))
+        var popoverList = popoverTriggerList.map(function (popoverTriggerEl) {
+            return new bootstrap.Popover(popoverTriggerEl)
+        })
+    });
+</script>

@@ -33,7 +33,7 @@
             </div>
             <div class="form-group col">
                 <label asp-for="AdditionDate" class="control-label">Date</label>
-                <input asp-for="AdditionDate" type="date" class="form-control" />
+                <input asp-for="AdditionDate" type="date" class="form-control" value="@Model.AdditionDate.ToString("yyyy-MM-dd")" max="@DateTime.Now.ToString("yyyy-MM-dd")" />
                 <span asp-validation-for="AdditionDate" class="text-danger"></span>
             </div>
             <div class="form-group col">
@@ -52,18 +52,12 @@
                 <label for="Amount" class="control-label">
                     Amount</labe>
                     <input type="text" name="Amount" value="0,00" class="form-control" />
-                @* <label asp-for="Amount" class="control-label"></label> *@
-                @* <input asp-for="Amount" class="form-control" /> *@
-                @* <span asp-validation-for="Amount" class="text-danger"></span> *@
             </div>
             <div class="form-group col">
                 <label asp-for="Note" class="control-label"></label>
                 <input asp-for="Note" class="form-control" />
                 <span asp-validation-for="Note" class="text-danger"></span>
             </div>
-            @* <div class=" mb-4"> *@
-            @*     <button type="submit" class="btn btn-primary flex-column align-self-start">Submit All Transaction</button> *@
-            @* </div> *@
         </form>
         
     </div>
