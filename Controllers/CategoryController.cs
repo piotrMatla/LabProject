@@ -4,9 +4,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Linq;
-using System.Threading.Tasks;
+using System.Xml.Linq;
 
 namespace LabProject.Controllers
 {
@@ -27,6 +25,7 @@ namespace LabProject.Controllers
         {
             if (CurrentUser == null)
             {
+                
                 
                 return RedirectToAction("Login", "Account");
             }
@@ -50,7 +49,6 @@ namespace LabProject.Controllers
             return category == null ? NotFound() : View(category);
         }
 
-        // POST: CategoryController/AddOrEdit
         // POST: CategoryController/AddOrEdit
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -151,6 +149,8 @@ namespace LabProject.Controllers
                 return View(category);
             }
         }
+
+        
 
         
     }

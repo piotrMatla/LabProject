@@ -96,13 +96,6 @@ namespace LabProject.Controllers
                 .Take(PageSize)
                 .ToListAsync();
 
-            //var transactionItems = await _context.Transaction
-            //   .Where(i => i.UserId == CurrentUser.Id)
-            //   .OrderByDescending(t => t.TransactionId)
-            //   .Skip((page - 1) * PageSize) 
-            //   .Take(PageSize)
-            //   .ToListAsync();
-
 
             ViewBag.Categories = await _context.Categories.Where(c => c.UserId == CurrentUser.Id).ToListAsync();
             ViewBag.CountedTransactions = totalTransactions;
