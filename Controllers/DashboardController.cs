@@ -16,21 +16,20 @@ using System.Security.Claims;
 namespace LabProject.Controllers
 {
     [Authorize]
-    public class DashboardController : Controller
+    public class DashboardController : BaseController
     {
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly LabProjectDbContext _context;
         private readonly SignInManager<ApplicationUser> _signInManager;
 
-        public DashboardController(UserManager<ApplicationUser> userManager, LabProjectDbContext context)
+        public DashboardController(UserManager<ApplicationUser> userManager, LabProjectDbContext context, SignInManager<ApplicationUser> signInManager) : base(userManager)
         {
             _userManager = userManager;
             _context = context ?? throw new ArgumentNullException(nameof(context)); // Dodatkowa kontrola null
-            //_signInManager = signInManager;
+            _signInManager = signInManager;
         }
         public async Task<IActionResult> Index()
         {
-            var currentUser = await _userManager.GetUserAsync(User);
             if (_context == null)
             {
                 // Obsługa błędu, jeśli _context jest null
@@ -39,7 +38,7 @@ namespace LabProject.Controllers
 
             // Zsumowanie wszystkich wydatków użytkownika
             var totalExpenses = await _context.Transaction
-                .Where(t => t.UserId == currentUser.Id)  
+                .Where(t => t.UserId == CurrentUser.Id)  
                 .Join(_context.Categories,
                       t => t.CategoryId,
                       c => c.Id,
@@ -49,7 +48,7 @@ namespace LabProject.Controllers
 
             // Zsumowanie wszystkich przychodów użytkownika
             var totalIncome = await _context.Transaction
-                .Where(t => t.UserId == currentUser.Id)
+                .Where(t => t.UserId == CurrentUser.Id)
                 .Join(_context.Categories,
                       t => t.CategoryId,
                       c => c.Id,
@@ -59,7 +58,7 @@ namespace LabProject.Controllers
 
             // Zsumowanie wszystkich przychodów użytkownika z ostatnich 30 dni
             var monthIncome = await _context.Transaction
-                .Where(t => t.UserId == currentUser.Id)
+                .Where(t => t.UserId == CurrentUser.Id)
                 .Where(t => t.AdditionDate >= DateTime.Now.AddDays(-30)) // Dodanie warunku daty
                 .Join(_context.Categories,
                       t => t.CategoryId,
@@ -70,7 +69,7 @@ namespace LabProject.Controllers
 
             // Zsumowanie wszystkich wydatków użytkownika z ostatnich 30 dni
             var monthExpenses = await _context.Transaction
-                .Where(t => t.UserId == currentUser.Id)
+                .Where(t => t.UserId == CurrentUser.Id)
                 .Where(t => t.AdditionDate >= DateTime.Now.AddDays(-30)) // Dodanie warunku daty
                 .Join(_context.Categories,
                       t => t.CategoryId,
@@ -80,7 +79,7 @@ namespace LabProject.Controllers
                 .SumAsync(x => x.t.Amount);
 
 
-            var FirstName = currentUser?.FirstName;
+            var FirstName = CurrentUser?.FirstName;
             ViewBag.Message = $"Hello, <strong class='text-primary'>{FirstName}</strong>";
             ViewBag.Layout = "_Layout_Dashboard";
             ViewBag.Expenses = monthExpenses;
@@ -91,24 +90,31 @@ namespace LabProject.Controllers
 
         public async Task<IActionResult> AssignPremiumRole()
         {
-            var currentUser = await _userManager.GetUserAsync(User);
+            
 
-            if (currentUser != null)
+            if (CurrentUser != null)
             {
-                // Dodajemy rolę UserPremium do użytkownika
-                var result = await _userManager.AddToRoleAsync(currentUser, "UserPremium");
+                var isInRole = await _userManager.IsInRoleAsync(CurrentUser, "UserPremium");
 
-                if (result.Succeeded)
+                if (!isInRole)
                 {
-                    // Przekierowanie do widoku Premium
-                    return RedirectToAction("Premium");
-                }
-                else
-                {
-                    // W przypadku błędu, np. gdy rola nie została przydzielona
-                    return RedirectToAction("Error");
+                    // Dodajemy rolę UserPremium do użytkownika
+                    var result = await _userManager.AddToRoleAsync(CurrentUser, "UserPremium");
+
+                    if (result.Succeeded)
+                    {
+                        // Przekierowanie do widoku Premium
+                        await _signInManager.RefreshSignInAsync(CurrentUser);
+                        return RedirectToAction("Premium");
+                    }
+                    else
+                    {
+                        // W przypadku błędu, np. gdy rola nie została przydzielona
+                        return RedirectToAction("Error");
+                    }
                 }
             }
+                
 
             return RedirectToAction("Error");
         }
