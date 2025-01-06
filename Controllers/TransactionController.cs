@@ -36,38 +36,14 @@ namespace LabProject.Controllers
                 return RedirectToAction("Login", "Account");
             }
 
-            var userLanguages = Request.Headers["Accept-Language"].ToString();
-            var culture = userLanguages.Split(',').FirstOrDefault();
-            try
-            {
-                var cultureInfo = CultureInfo.GetCultureInfo(culture);
-
-                if (cultureInfo.IsNeutralCulture)
-                {
-                    culture = culture switch
-                    {
-                        "en" => "en-US",
-                        "fr" => "fr-FR",
-                        "pl" => "pl-PL",
-                        _ => "en-US"
-                    };
-                }
-
-                var regionInfo = new RegionInfo(culture);
-                ViewBag.CurrencySymbol = regionInfo.CurrencySymbol;
-            }
-            catch (CultureNotFoundException)
-            {
-                culture = "en-US";
-                ViewBag.CurrencySymbol = new RegionInfo(culture).CurrencySymbol;
-            }
+            SetCurrencySymbol();
+            
 
             var totalTransactions = await _context.Transaction
                 .Where(i => i.UserId == CurrentUser.Id)
                 .CountAsync();
             var totalPages = (int)Math.Ceiling(totalTransactions / (double)PageSize);
 
-            ViewBag.CurrentCulture = culture;
             ViewBag.CurrentPage = page;
             ViewBag.TotalPages = totalPages;
 

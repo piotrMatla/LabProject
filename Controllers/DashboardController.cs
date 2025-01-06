@@ -36,6 +36,8 @@ namespace LabProject.Controllers
                 return BadRequest("Database context is not available.");
             }
 
+            SetCurrencySymbol();
+
             // Zsumowanie wszystkich wydatków użytkownika
             var totalExpenses = await _context.Transaction
                 .Where(t => t.UserId == CurrentUser.Id)  
@@ -82,10 +84,23 @@ namespace LabProject.Controllers
             var FirstName = CurrentUser?.FirstName;
             ViewBag.Message = $"Hello, <strong class='text-primary'>{FirstName}</strong>";
             ViewBag.Layout = "_Layout_Dashboard";
-            ViewBag.Expenses = monthExpenses;
-            ViewBag.Income = monthIncome;
-            ViewBag.Total = totalIncome - totalExpenses;
-            return View();
+
+            ViewBag.Expenses = monthExpenses.ToString("C", ViewBag.currencyCustomFormat);
+            ViewBag.Income = monthIncome.ToString("C", ViewBag.currencyCustomFormat);
+            var totalExpansesIncome = totalIncome - totalExpenses;
+            ViewBag.Balance = $"{(totalExpansesIncome < 0 ? "-" : string.Empty)} {Math.Abs(totalExpansesIncome).ToString("C", ViewBag.CurrencyCustomFormat)}";
+
+
+            ViewBag.Categories = await _context.Categories.Where(c => c.UserId == CurrentUser.Id).ToListAsync();
+
+            var transactionItems = await _context.Transaction
+               .Where(i => i.UserId == CurrentUser.Id)
+               .OrderByDescending(t => t.AdditionDate)
+               .ThenByDescending(t => t.TransactionId)
+               .Take(10)
+               .ToListAsync();
+
+            return View(transactionItems);
         }
 
         public async Task<IActionResult> AssignPremiumRole()

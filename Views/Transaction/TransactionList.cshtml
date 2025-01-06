@@ -5,12 +5,6 @@
 
     ViewData["Title"] = "Transactions";
 
-    var currencyCustomFormat = (System.Globalization.NumberFormatInfo)System.Globalization.CultureInfo.InvariantCulture.NumberFormat.Clone();
-    currencyCustomFormat.CurrencyGroupSeparator = " ";
-    currencyCustomFormat.CurrencySymbol = ViewBag.CurrencySymbol == "£" ? "£ " : " " + ViewBag.CurrencySymbol;
-    currencyCustomFormat.CurrencyPositivePattern = ViewBag.CurrencySymbol == "£" ? 0 : 1;
-    currencyCustomFormat.CurrencyDecimalSeparator = ViewBag.CurrentCulture == "pl-PL" ? "," : ".";
-
     var categories = ViewBag.Categories as List<LabProject.Models.Category>;
     int currentPage = ViewBag.CurrentPage;
     int totalPages = ViewBag.TotalPages;
@@ -95,7 +89,7 @@
                                 <p class="@(categories.FirstOrDefault(s => s.Id == item.CategoryId).Type == "Expense" ? "badge bg-label-danger" : "badge bg-label-success") me-1 fw-bold">@categories.FirstOrDefault(i => i.Id == item.CategoryId)?.Name</p>
                             </td>
                             <td>
-                                @item.Amount.ToString("C", currencyCustomFormat)
+                                @item.Amount.ToString("C", ViewBag.currencyCustomFormat)
                             </td>
                             <td>
                                 @if (!string.IsNullOrEmpty(item.Note))
