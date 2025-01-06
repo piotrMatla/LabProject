@@ -107,7 +107,6 @@ namespace LabProject.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, Category category)
-        public async Task<IActionResult> Edit(int id, Category category)
         {
             category.UserId = CurrentUser.Id.ToString();
             try
@@ -115,13 +114,9 @@ namespace LabProject.Controllers
                 _context.Update(category);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(CategoryList));
-                _context.Update(category);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(CategoryList));
             }
             catch
             {
-                return View(category);
                 return View(category);
             }
         }

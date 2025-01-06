@@ -87,24 +87,6 @@
             </div>
         </div>
     </div>
-    @if (!User.IsInRole("UserPremium"))
-    {
-        <div class="row mt-4">
-            <div class="col-md-12">
-            <div class="card">
-                <div class="card-header">
-                    <h3 class="card-title m-0 me-2">Wanna see more?</h3>
-
-                </div>
-                <div class="card-body">
-                        <p>Unlock the full potential of your experience with our Premium subscription! Gain exclusive access to detailed transaction summaries and a suite of advanced features designed to enhance your journey. Don’t miss out – upgrade today and take control of your data like never before!</p>
-                        <button class="btn btn-primary" onclick="location.href='@Url.Action("AssignPremiumRole", "Dashboard")'">Buy Premium </button>
-                
-                </div>
-        </div>
-        </div>
-        </div>
-    }
     @if (User.IsInRole("UserPremium"))
     {
         <div class="card table-responsive text-nowrap mt-4">
@@ -178,6 +160,24 @@
                     }
                 </tbody>
             </table>
+        </div>
+    }
+    else
+    {
+        <div class="row mt-4">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title m-0 me-2">Wanna see more?</h3>
+
+                    </div>
+                    <div class="card-body">
+                        <p>Unlock the full potential of your experience with our Premium subscription! Gain exclusive access to detailed transaction summaries and a suite of advanced features designed to enhance your journey. Don’t miss out – upgrade today and take control of your data like never before!</p>
+                        <button class="btn btn-primary" onclick="location.href='@Url.Action("AssignPremiumRole", "Dashboard")'">Buy Premium </button>
+
+                    </div>
+                </div>
+            </div>
         </div>
     }
 

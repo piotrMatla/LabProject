@@ -35,13 +35,10 @@
 </head>
 <body>
     <div class="d-flex layout-wrapper">
-    <div class="d-flex layout-wrapper">
         <aside id="layout-menu" class="layout-menu menu-vertical menu bg-menu-theme position-relative" style="max-width: 250px;">
             <nav class="sidebar">
                 <div class="app-brand p-2 demo">
                     <a href="/Dashboard" class="app-brand-link">
-                        <img src="~/assets/logo.png" class="brand_custom_width" alt="Alternate Text" />
-                        <span class="app-brand-text demo menu-text fw-bolder ms-2">MoneyMind</span>
                         <img src="~/assets/logo.png" class="brand_custom_width" alt="Alternate Text" />
                         <span class="app-brand-text demo menu-text fw-bolder ms-2">MoneyMind</span>
                     </a>
@@ -99,15 +96,12 @@
                     </li>
                     <li class="menu-item">
                         <a id="manage" class="menu-link" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage"><i class='bx bx-cog p-2'></i>Settings</a>
-                        <a id="manage" class="menu-link" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage"><i class='bx bx-cog p-2'></i>Settings</a>
                     </li>
                     <li class="menu-item">
-                        <a class="menu-link" asp-area="" asp-controller="Home" asp-action="Privacy"><i class='bx bx-check-shield p-2'></i>Privacy</a>
                         <a class="menu-link" asp-area="" asp-controller="Home" asp-action="Privacy"><i class='bx bx-check-shield p-2'></i>Privacy</a>
                     </li>
                     <li class="menu-item mt-auto">
                         <a href="@Url.Page("/Account/Logout", new { area = "Identity" })" class="menu-link">
-                            <i class='bx bx-log-out p-2'></i> Logout
                             <i class='bx bx-log-out p-2'></i> Logout
                         </a>
                     </li>
