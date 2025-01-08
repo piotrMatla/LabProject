@@ -1,6 +1,6 @@
 ﻿
 @{
-    
+    string? currentPage = ViewContext.HttpContext.Request.Path;
 }
 
 
@@ -30,7 +30,12 @@
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
 
     <link rel="stylesheet" href="~/LabProject.styles.css" asp-append-version="true" />
-    
+    <style>
+        .menu-sub {
+            display: none;
+            transition: .3s;
+        }
+    </style>
     
 </head>
 <body>
@@ -53,18 +58,18 @@
 
                 <ul class="d-flex flex-column menu-inner py-1 align-items-end">
                     <!-- MAIN LINKS -->
-                    <li class="menu-item active">
+                    <li class="menu-item @(currentPage == "/Dashboard" ? "active" : "")">
 
                         <a class="menu-link" asp-area="" asp-controller="Dashboard" asp-action="Index"><i class='bx bxs-dashboard p-2'></i>Dashboard</a>
                     </li>
 
-                    <li class="menu-item">
+                    <li class="menu-item @(currentPage.StartsWith("/Category") ? "active" : "")">
                         <a class="menu-link" asp-area="" asp-controller="Category" asp-action="CategoryList">
                             <i class='bx bx-purchase-tag-alt p-2'></i>
                             Categories</a>
                     </li>
 
-                    <li class="menu-item">
+                    <li class="menu-item @(currentPage.StartsWith("/Transaction") ? "active" : "")">
                         <a class="menu-link" asp-area="" asp-controller="Transaction" asp-action="TransactionList">
                             <i class='bx bx-transfer p-2'></i>
                             Transaction
@@ -77,26 +82,27 @@
                         
                         <span class="menu-header-text">Account</span>
                     </li>
-                    <li class="menu-item open">
-                        <a href="javascript:void(0);" class="menu-link menu-toggle">
-                            <i class='bx bx-user p-2'></i>
-                            <i class='bx bx-user p-2'></i>
-                            <div data-i18n="Account Settings">Account Settings</div>
+                    <li class="menu-item @(currentPage.EndsWith("/Account") || currentPage.Contains("/Identity/") ? "active open" : "")">
+                        
+                        <a class="menu-link" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">
+                            <i class='bx bx-user p-2'></i>Account Settings
+
                         </a>
                         <ul class="menu-sub">
 
-                            <li class="menu-item">
-                                <a href="pages-account-settings-notifications.html" class="menu-link">
-                                    <div data-i18n="Notifications">Notifications</div>
-                                </a>
+                            <li class="menu-item @(currentPage == "/Identity/Account/Manage" ? " active" : "")">
+                                <a class="menu-link" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Profile</a>
                             </li>
-
+                            <li class="menu-item @(currentPage == "/Identity/Account/Manage/Email" ? " active" : "")">
+                                <a class="menu-link" asp-area="Identity" asp-page="/Account/Manage/Email" title="Manage Email">Email</a>
+                            </li>
+                            <li class="menu-item @(currentPage == "/Identity/Account/Manage/ChangePassword" ? " active" : "")">
+                                <a class="menu-link" asp-area="Identity" asp-page="/Account/Manage/ChangePassword" title="Manage Password">Password</a>
+                            </li>
                         </ul>
                     </li>
-                    <li class="menu-item">
-                        <a id="manage" class="menu-link" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage"><i class='bx bx-cog p-2'></i>Settings</a>
-                    </li>
-                    <li class="menu-item">
+                    
+                    <li class="menu-item @(currentPage.EndsWith("/Privacy") ? "active" : "" )">
                         <a class="menu-link" asp-area="" asp-controller="Home" asp-action="Privacy"><i class='bx bx-check-shield p-2'></i>Privacy</a>
                     </li>
                     <li class="menu-item mt-auto">
@@ -120,17 +126,15 @@
     @* <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script> *@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 
-    @* <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script> *@
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-
     <script src="~/js/site.js" asp-append-version="true"></script>
-    <script src="~/js/menu.js" asp-append-version="true"></script>
-    <script src="~/js/main.js" asp-append-version="true"></script>
+
     
     <script src="~/js/main.js" asp-append-version="true"></script>
     
     <script src="~/js/helpers.js" asp-append-version="true"></script>
     <script src="~/js/bootstrap.js" asp-append-version="true"></script>
+
+    
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>
