@@ -10,7 +10,7 @@
     ViewData["Title"] = "Dashboard";
     var exp = ViewBag.Expenses;
     var categories = ViewBag.Categories as List<LabProject.Models.Category>;
-
+    var categoryExpenses = ViewBag.CategoryExpenses as List<dynamic>;
 }
 
 <div class="container w-100 d-flex justify-content-between align-items-center flex-wrap">
@@ -71,7 +71,24 @@
 
                 </div>
                 <div class="card-body">
-                    <canvas id="expensesByCategoryChart"></canvas>
+                    <table cellpadding="10" width="100%">
+                            @if (categoryExpenses != null)
+                            {
+                                foreach (var item in categoryExpenses)
+                                {
+                                    <tr>
+                                        <td><b>@item.CategoryName</b></td>
+                                        <td style="text-align: right;">@item.TotalExpenses.ToString("C")</td>
+                                    </tr>
+                                }
+                            }
+                            else
+                            {
+                                <tr>
+                                    <td colspan="2">No data available.</td>
+                                </tr>
+                            }
+                    </table>
                 </div>
             </div>
         </div>
