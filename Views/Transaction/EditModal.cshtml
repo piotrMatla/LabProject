@@ -1,0 +1,70 @@
+﻿@model LabProject.Models.Transaction
+
+@{
+    string idContent = $"EditModal-{Model.TransactionId}";
+    var categories = ViewBag.Categories as List<LabProject.Models.Category>;
+}
+
+
+<div class="modal fade" id="@idContent" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content">
+            <div class="modal-header flex-wrap">
+                <h5 class="modal-title mb-3" id="exampleModalLabel2">Edit your transaction</h5>
+                
+                <button type="button"
+                        class="btn-close"
+                        data-bs-dismiss="modal"
+                        aria-label="Close"></button>
+
+                <form id="transactionForm" asp-controller="Transaction" asp-action="Edit" method="post">
+                    <input type="hidden" asp-for="TransactionId" />
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                    <div class="form-group mb-2">
+                        <label asp-for="@Model.TransactionName" class="control-label">Transaction Name</label>
+                        <input asp-for="@Model.TransactionName" class="form-control" />
+                        <span asp-validation-for="@Model.TransactionName" class="text-danger"></span>
+                    </div>
+                    <div class="form-group mb-2">
+                        <label asp-for="@Model.AdditionDate" class="control-label">Date</label>
+                        <input asp-for="@Model.AdditionDate" type="date" class="form-control" value="@Model.AdditionDate.ToString("yyyy-MM-dd")" />
+                        <span asp-validation-for="@Model.AdditionDate" class="text-danger"></span>
+                    </div>
+                    <div class="form-group mb-2">
+                        <label asp-for="CategoryId" class="control-label">Category</label>
+                        <select asp-for="CategoryId" class="form-select" aria-label="Default select example">
+                            @foreach (var item in categories)
+                            {
+                                <option value="@item.Id" class="fw-bold bg-secondary @(item.Type == "Expense" ? "text-danger" : "text-success")">@item.Name</option>
+                            }
+
+                        </select>
+                        <span asp-validation-for="CategoryId" class="text-danger"></span>
+                    </div>
+                    <div class="form-group mb-2">
+                        <label for="@Model.Amount" class="control-label">
+                            Amount</labe>
+                            <input asp-for="@Model.Amount" class="form-control" />
+                    </div>
+                    <div class="form-group mb-2">
+                        <label asp-for="@Model.Note" class="control-label"></label>
+                        <input asp-for="@Model.Note" class="form-control" />
+                        <span asp-validation-for="@Model.Note" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <input type="submit" value="Save" class="btn btn-primary mb-4" />
+                    </div>
+                </form>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

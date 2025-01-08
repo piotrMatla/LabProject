@@ -1,0 +1,182 @@
+﻿@model IEnumerable<LabProject.Models.Transaction>
+
+
+@{
+
+    ViewData["Title"] = "Transactions";
+
+    var currencyCustomFormat = (System.Globalization.NumberFormatInfo)System.Globalization.CultureInfo.InvariantCulture.NumberFormat.Clone();
+    currencyCustomFormat.CurrencyGroupSeparator = " ";
+    currencyCustomFormat.CurrencySymbol = ViewBag.CurrencySymbol == "£" ? "£ " : " " + ViewBag.CurrencySymbol;
+    currencyCustomFormat.CurrencyPositivePattern = ViewBag.CurrencySymbol == "£" ? 0 : 1;
+    currencyCustomFormat.CurrencyDecimalSeparator = ViewBag.CurrentCulture == "pl-PL" ? "," : ".";
+
+    var categories = ViewBag.Categories as List<LabProject.Models.Category>;
+    int currentPage = ViewBag.CurrentPage;
+    int totalPages = ViewBag.TotalPages;
+
+    string startItemsRange = currentPage - 1 != 0 ? $"{ currentPage - 1}1" : "1";
+    string endItemsRange = currentPage != totalPages ? $"{currentPage}0" : $"{currentPage - 1}{Model.Count()}";
+    int allTransactions = ViewBag.CountedTransactions;
+
+    int maxPagesToShow = 5;
+    int startPage = Math.Max(1, currentPage - 2); 
+    int endPage = Math.Min(totalPages, currentPage + 2); 
+
+    if (totalPages > maxPagesToShow)
+    {
+        if (currentPage <= 3)
+        {
+            endPage = Math.Min(maxPagesToShow, totalPages); 
+        }
+        else if (currentPage >= totalPages - 2)
+        {
+            startPage = totalPages - maxPagesToShow + 1; 
+        }
+    }
+}
+
+
+<div class="card p-4">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb ">
+            <li class="breadcrumb-item">
+                <a href="@Url.Action("Index", "Dashboard")">Dashboard</a>
+            </li>
+            <li class="breadcrumb-item active">@ViewData["Title"]</li>
+        </ol>
+    </nav>
+
+    <h5 class="card-header">Your transactions</h5>
+    <a type="button"
+    class="d-flex btn btn-primary me-auto ms-3 mb-3 align-items-center"
+    asp-action="Create">
+        <i class='bx bx-plus pe-2'></i>add transaction
+    </a>
+
+    <div class="table-responsive text-nowrap">
+        @* ################### TRANSACTION LIST  *@
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>
+                        Transaction name
+                    </th>
+                    <th>
+                        Date
+                    </th> 
+                    <th>
+                        Category
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Amount)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Note)
+                    </th>
+
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model.Any())
+                { 
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+
+                            <td>
+                                @Html.DisplayFor(modelItem => item.TransactionName)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.AdditionDate)
+                            </td>
+                            <td>
+                                <p class="@(categories.FirstOrDefault(s => s.Id == item.CategoryId).Type == "Expense" ? "badge bg-label-danger" : "badge bg-label-success") me-1 fw-bold">@categories.FirstOrDefault(i => i.Id == item.CategoryId)?.Name</p>
+                            </td>
+                            <td>
+                                @item.Amount.ToString("C", currencyCustomFormat)
+                            </td>
+                            <td>
+                                @if (!string.IsNullOrEmpty(item.Note))
+                                {
+                                    <div class="col">
+                                        <a href="#"
+                                           class="btn btn-link text-nowrap"
+                                           data-bs-toggle="popover"
+                                           data-bs-offset="0,14"
+                                           data-bs-placement="top"
+                                           data-bs-html="true"
+                                           data-bs-content="<p class='p-2'>@item.Note</p>"
+                                           aria-describedby="popover97906">
+                                            Details
+                                        </a>
+                                    </div>
+                                }
+
+                            </td>
+                            <td>
+                                @* Edit button *@
+                                <a asp-action="Edit" asp-route-id="@item.TransactionId" data-bs-toggle="modal"
+                                   data-bs-target="#EditModal-@(item.TransactionId)" data-url="@Url.Action($"Edit/{item.TransactionId}")"><i class='bx bxs-edit m-2 h5 text-primary'></i></a>
+                                @await Html.PartialAsync("EditModal", item)
+
+                                @* Delete button *@
+                                <a asp-action="Delete" asp-route-id="@item.TransactionId" data-bs-toggle="modal" data-bs-target="@("#DeleteModal-"+item.TransactionId)"><i class='bx bx-trash m-2 h5 text-danger'></i></a>
+                                @await Html.PartialAsync("DeleteModal", item)
+                            </td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td>
+                            <p class="pt-2">You don't have a transaction yet.</p>
+                        </td>
+                    </tr>
+                }
+
+            </tbody>
+        </table>
+@* ################### PAGINATION  *@
+        <nav aria-label="Page navigation" class="d-flex mt-3 justify-content-between">
+            <p>@($"{startItemsRange}-{endItemsRange}") transactions from @allTransactions</p>
+            <ul class="pagination justify-content-end">
+                <li class="page-item @(totalPages < 5 ? "d-none" : "") @(currentPage == 1 ? "disabled" : "")">
+                    <a class="page-link" href="@Url.Action("TransactionList", new { page = 1 })">
+                        <i class="bx bx-chevrons-left"></i>
+                    </a>
+                </li>
+                <li class="page-item @(currentPage == 1 ? "disabled" : "")">
+                    <a class="page-link" href="@Url.Action("TransactionList", new { page = currentPage - 1 })"><i class="tf-icon bx bx-chevron-left"></i></a>
+                </li>
+
+                @for (int i = startPage; i <= endPage; i++)
+                {
+                    <li class="page-item @(i == currentPage ? "active" : "")">
+                        <a class="page-link" href="@Url.Action("TransactionList", new { page = i })">@i</a>
+                    </li>
+                }
+
+                <li class="page-item @(currentPage == totalPages ? "disabled" : "")">
+                    <a class="page-link" href="@Url.Action("TransactionList", new { page = currentPage + 1 })"><i class="tf-icon bx bx-chevron-right"></i></a>
+                </li>
+                <li class="page-item @(totalPages < 5 ? "d-none" : "") @(currentPage == totalPages ? "disabled" : "")">
+                    <a class="page-link" href="@Url.Action("TransactionList", new { page = totalPages })">
+                        <i class="bx bx-chevrons-right"></i>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+</div>
+
+<script>
+        document.addEventListener('DOMContentLoaded', function () {
+        var popoverTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="popover"]'))
+        var popoverList = popoverTriggerList.map(function (popoverTriggerEl) {
+            return new bootstrap.Popover(popoverTriggerEl)
+        })
+    });
+</script>

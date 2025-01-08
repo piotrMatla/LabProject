@@ -8,4 +8,6 @@ public class ApplicationDbContext : DbContext
     }
     public DbSet<Category> Categories { get; set; }
 
+public DbSet<LabProject.Models.Transaction> Transaction { get; set; } = default!;
+
 }

@@ -10,12 +10,12 @@ using System.Xml.Linq;
 namespace LabProject.Controllers
 {
     [Authorize]
-    public class CategoryController : Controller
+    public class CategoryController : BaseController
     {
         private readonly ApplicationDbContext _context;
         private readonly UserManager<ApplicationUser> _userManager;
 
-        public CategoryController(ApplicationDbContext dbContext, UserManager<ApplicationUser> userManager)
+        public CategoryController(ApplicationDbContext dbContext, UserManager<ApplicationUser> userManager) : base(userManager)
         {
             _context = dbContext;
             _userManager = userManager;
@@ -23,15 +23,14 @@ namespace LabProject.Controllers
         // GET: CategoryController
         public async Task<IActionResult> CategoryList()
         {
-            var user = await _userManager.GetUserAsync(User);
-            if (user == null)
+            if (CurrentUser == null)
             {
                 
                 return RedirectToAction("Login", "Account");
             }
 
             var categories = _context.Categories
-            .Where(c => c.UserId == user.Id)
+            .Where(c => c.UserId == CurrentUser.Id)
             .ToList();
 
 
@@ -61,17 +60,25 @@ namespace LabProject.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> AddOrEdit([Bind("Id,Name,IsDefault, UserId, Type")] Category category)
         {
-            var user = await _userManager.GetUserAsync(User);
-            if (user == null)
+            if (CurrentUser == null)
             {
                 return RedirectToAction("Login", "Account");
+            }
+
+            var existingCategory = await _context.Categories
+        .Where(c => c.UserId == CurrentUser.Id && c.Name.ToLower() == category.Name.ToLower())
+        .FirstOrDefaultAsync();
+
+            if (existingCategory != null && existingCategory.Type == category.Type)
+            {
+                ModelState.AddModelError("Name", "A category with this name already exists.");
             }
 
             if (ModelState.IsValid)
             {
                 try
                 {
-                    category.UserId = user.Id.ToString();
+                    category.UserId = CurrentUser.Id.ToString();
                     if (category.Id == 0)
                     {
                         
@@ -91,9 +98,8 @@ namespace LabProject.Controllers
                 }
             }
             var categories = await _context.Categories
-                .Where(c => c.UserId == user.Id)
+                .Where(c => c.UserId == CurrentUser.Id)
                 .ToListAsync();
-            //return View("CategoryList", categories);
             return PartialView("_AddOrEditModal", category);
         }
 
@@ -108,8 +114,7 @@ namespace LabProject.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, Category category)
         {
-            var user = await _userManager.GetUserAsync(User);
-            category.UserId = user.Id.ToString();
+            category.UserId = CurrentUser.Id.ToString();
             try
             {
                 _context.Update(category);

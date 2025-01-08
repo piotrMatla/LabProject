@@ -1,0 +1,151 @@
+﻿@model LabProject.Models.Transaction
+
+@{
+    ViewData["Title"] = "Add new transaction";
+    var categories = ViewBag.Categories as List<LabProject.Models.Category>;
+}
+
+
+
+<div  class="row card p-4">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb ">
+            <li class="breadcrumb-item">
+                <a href="@Url.Action("Index", "Dashboard")">Dashboard</a>
+            </li>
+            <li class="breadcrumb-item">
+                <a asp-action="TransactionList">Transactions                                                                      </a>
+            </li>
+            <li class="breadcrumb-item active">@ViewData["Title"]</li>
+        </ol>
+    </nav>
+    <h5 class="card-header ">Add transaction</h5>
+    
+    
+    <div id="form-container" class="card-body ">
+        <form asp-action="Create" class="row form-instance transaction-form" method="post" data-index="0">
+
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group col">
+                <label asp-for="TransactionName" class="control-label">Transaction name</label>
+                <input asp-for="TransactionName" class="form-control" />
+                <span asp-validation-for="TransactionName" class="text-danger"></span>
+            </div>
+            <div class="form-group col">
+                <label asp-for="AdditionDate" class="control-label">Date</label>
+                <input asp-for="AdditionDate" type="date" class="form-control" value="@Model.AdditionDate.ToString("yyyy-MM-dd")" max="@DateTime.Now.ToString("yyyy-MM-dd")" />
+                <span asp-validation-for="AdditionDate" class="text-danger"></span>
+            </div>
+            <div class="form-group col">
+                <label asp-for="CategoryId" class="control-label">Category</label>
+                <select asp-for="CategoryId" class="form-select" aria-label="Default select example">
+                    @foreach (var item in categories)
+                    {
+                        <option value="@item.Id" class="fw-bold bg-secondary @(item.Type == "Expense" ? "text-danger" : "text-success")">@item.Name</option>
+                    }
+
+                </select>
+                @* <input asp-for="CategoryId" class="form-control" /> *@
+                <span asp-validation-for="CategoryId" class="text-danger"></span>
+            </div>
+            <div class="form-group col">
+                <label for="Amount" class="control-label">
+                    Amount</labe>
+                    <input type="text" name="Amount" value="0,00" class="form-control" />
+            </div>
+            <div class="form-group col">
+                <label asp-for="Note" class="control-label"></label>
+                <input asp-for="Note" class="form-control" />
+                <span asp-validation-for="Note" class="text-danger"></span>
+            </div>
+        </form>
+        
+    </div>
+    <button id="add-form-btn" class="btn btn-icon btn-secondary flex-column align-self-end me-4"><i class='bx bx-plus'></i></button>
+    <div class="">
+        <button id="submit-all-btn" class="btn btn-primary">Submit All Transactions</button>
+        @* <input id="submit-all-btn" type="submit" value="Create" class="btn btn-primary" /> *@
+    </div>
+    
+    
+</div>
+
+
+
+<script defer>
+    document.getElementById("add-form-btn").addEventListener("click", function () {
+
+        const formContainer = document.getElementById("form-container");
+
+
+        const firstForm = document.querySelector(".form-instance");
+
+
+        const clonedForm = firstForm.cloneNode(true);
+
+        const currentIndex = document.querySelectorAll(".transaction-form").length;
+
+
+        clonedForm.setAttribute("data-index", currentIndex);
+        clonedForm.querySelectorAll("input, select").forEach(input => {
+
+            input.value = "";
+
+
+            if (input.name) {
+                input.name = input.name.replace(/\[\d+\]/, `[${currentIndex}]`);
+            }
+            if (input.id) {
+                input.id = input.id.replace(/\_\d+/, `_${currentIndex}`);
+            }
+        });
+
+  
+        formContainer.appendChild(clonedForm);
+    });
+
+        document.getElementById("submit-all-btn").addEventListener("click", function () {
+        const forms = document.querySelectorAll(".transaction-form");
+
+        const allData = [];
+        forms.forEach(form => {
+            const formData = {};
+            const inputs = form.querySelectorAll("input, select");
+            inputs.forEach(input => {
+                let value = input.value;
+
+              
+                if (input.name.toLowerCase().includes("amount")) {
+                    value = value.replace(",", ".");
+                }
+
+                formData[input.name] = value;
+            });
+            allData.push(formData);
+        });
+
+            fetch('/Transaction/SaveMultiple', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(allData)
+        })
+        .then(response => {
+            if (response.ok) {
+                window.location.href = '/Transaction/TransactionList';
+            } else {
+                window.location.href = '/Transaction/TransactionList';
+                return response.json().then(data => {
+                    throw new Error(data.message || "Failed to save transactions.");
+                });
+            }
+        })
+        .catch(error => alert(error.message));
+    });
+
+</script>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
