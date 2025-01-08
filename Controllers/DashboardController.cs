@@ -80,7 +80,31 @@ namespace LabProject.Controllers
                 .Where(x => x.c.Type == "Expense")
                 .SumAsync(x => x.t.Amount);
 
+            var categories = await _context.Categories
+                .Where(c => c.UserId == CurrentUser.Id && c.Type == "Expense")
+                .ToListAsync();
 
+       
+            var thirtyDaysAgo = DateTime.Now.AddDays(-30);
+
+            var categoryExpenses = new List<object>();
+
+            foreach (var category in categories)
+            {
+                var total = await _context.Transaction
+                    .Where(t => t.CategoryId == category.Id
+                            && t.UserId == CurrentUser.Id
+                            && t.AdditionDate >= thirtyDaysAgo)
+                    .SumAsync(t => t.Amount); 
+
+                categoryExpenses.Add(new
+                {
+                    CategoryName = category.Name,
+                    TotalExpenses = total
+                });
+            }
+
+            ViewBag.CategoryExpenses = categoryExpenses;
             var FirstName = CurrentUser?.FirstName;
             ViewBag.Message = $"Hello, <strong class='text-primary'>{FirstName}</strong>";
             ViewBag.Layout = "_Layout_Dashboard";
