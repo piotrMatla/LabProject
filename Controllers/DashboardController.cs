@@ -22,6 +22,7 @@ namespace LabProject.Controllers
         private readonly LabProjectDbContext _context;
         private readonly SignInManager<ApplicationUser> _signInManager;
 
+
         public DashboardController(UserManager<ApplicationUser> userManager, LabProjectDbContext context, SignInManager<ApplicationUser> signInManager) : base(userManager)
         {
             _userManager = userManager;
@@ -104,6 +105,35 @@ namespace LabProject.Controllers
                 });
             }
 
+
+            // Oblicz początek i koniec poprzedniego miesiąca
+            var today = DateTime.Now;
+            var months = new[] { "1st Month", "2nd Month", "3rd Month" };
+            var incomeData = new decimal[3];
+            var expenseData = new decimal[3];
+
+            for (int i = 0; i < 3; i++)
+            {
+                var firstDayOfPreviousMonth = new DateTime(today.Year, today.Month, 1).AddMonths(-i); // pierwszy dzień poprzedniego miesiąca
+                var lastDayOfPreviousMonth = firstDayOfPreviousMonth.AddMonths(1).AddDays(-i); // ostatni dzień poprzedniego miesiąca
+
+                // Zapytanie do bazy danych, aby pobrać sumę wydatków z poprzedniego miesiąca
+                var totalExp = await _context.Transaction
+                    .Where(t => categories.Select(c => c.Id).Contains(t.CategoryId) && t.AdditionDate >= firstDayOfPreviousMonth && t.AdditionDate <= lastDayOfPreviousMonth)
+                    .SumAsync(t => t.Amount);
+
+                expenseData[i] = totalExp;
+
+                var totalInc = await _context.Transaction
+                    .Where(t => !categories.Select(c => c.Id).Contains(t.CategoryId) && t.AdditionDate >= firstDayOfPreviousMonth && t.AdditionDate <= lastDayOfPreviousMonth)
+                    .SumAsync(t => t.Amount);
+
+                incomeData[i] = totalInc;
+            }
+
+            ViewBag.Months = months;
+            ViewBag.IncomeData = incomeData;
+            ViewBag.ExpenseData = expenseData;
             ViewBag.CategoryExpenses = categoryExpenses;
             var FirstName = CurrentUser?.FirstName;
             ViewBag.Message = $"Hello, <strong class='text-primary'>{FirstName}</strong>";
