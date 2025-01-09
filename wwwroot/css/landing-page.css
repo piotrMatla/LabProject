@@ -1,0 +1,115 @@
+﻿.section-py {
+    padding: 6.25rem 0
+}
+
+@media(max-width: 1199.98px) {
+    .section-py {
+        padding: 4rem 0
+    }
+}
+
+@media(max-width: 767.98px) {
+    .section-py {
+        padding: 3rem 0
+    }
+}
+
+.first-section-pt {
+    padding-top: 11.28rem
+}
+
+@media(max-width: 1199.98px) {
+    .first-section-pt {
+        padding-top: 7.5rem
+    }
+}
+
+.card[class*=card-hover-border-] {
+    transition: all .2s ease-in-out
+}
+
+.landing-reviews {
+    border-top-left-radius: 3.75rem;
+    border-top-right-radius: 3.75rem
+}
+
+.banner-bg-img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    object-fit: cover;
+    object-position: left
+}
+
+.landing-footer .footer-link, .landing-footer .footer-text {
+    color: #fff;
+    opacity: .78
+}
+
+.landing-footer .footer-title {
+    color: #fff;
+    opacity: .92
+}
+
+.landing-footer .footer-bottom-text {
+    color: #d3d4dc
+}
+
+.landing-footer .footer-bottom {
+    background-color: #282c3e
+}
+
+.landing-footer .footer-link {
+    transition: all .2s ease-in-out
+}
+
+    .landing-footer .footer-link:hover {
+        opacity: 1
+    }
+
+.landing-footer .footer-top {
+    padding-top: 3.3rem;
+    padding-bottom: 2.3rem;
+    border-top-left-radius: 3.75rem;
+    border-top-right-radius: 3.75rem
+}
+
+@media(max-width: 767.98px) {
+    .landing-footer .footer-top {
+        padding: 3rem 0
+    }
+}
+
+.landing-footer .footer-top .footer-bg {
+    object-position: center
+}
+
+@media(min-width: 992px) {
+    .landing-footer .footer-logo-description {
+        max-width: 385px
+    }
+}
+
+.landing-footer .footer-form {
+    max-width: 22.25rem
+}
+
+    .landing-footer .footer-form input {
+        background-color: rgba(0,0,0,0);
+        border-color: #4e4f6c;
+        color: #fff
+    }
+
+        .landing-footer .footer-form input:hover:not([disabled]):not([focus]) {
+            border-color: #4e4f6c
+        }
+
+        .landing-footer .footer-form input::placeholder {
+            color: rgba(255,255,255,.5)
+        }
+
+    .landing-footer .footer-form label {
+        color: #d5d5e2
+    }
