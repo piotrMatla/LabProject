@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Authorization;
 using System.Xml.Linq;
 using System.Drawing.Printing;
 using System.Globalization;
+using Microsoft.Data.SqlClient;
 
 
 
@@ -28,7 +29,7 @@ namespace LabProject.Controllers
 
 
         // GET: TransactionController
-        public async Task<IActionResult> TransactionList(int page = 1)
+        public async Task<IActionResult> TransactionList(int page = 1, string sortOrder = "TransactionId", string sortDirection = "desc")
         {
             if (CurrentUser == null)
             {
@@ -36,47 +37,64 @@ namespace LabProject.Controllers
                 return RedirectToAction("Login", "Account");
             }
 
-            var userLanguages = Request.Headers["Accept-Language"].ToString();
-            var culture = userLanguages.Split(',').FirstOrDefault();
-            try
-            {
-                var cultureInfo = CultureInfo.GetCultureInfo(culture);
+            SetCurrencySymbol();
 
-                if (cultureInfo.IsNeutralCulture)
-                {
-                    culture = culture switch
-                    {
-                        "en" => "en-US",
-                        "fr" => "fr-FR",
-                        "pl" => "pl-PL",
-                        _ => "en-US"
-                    };
-                }
-
-                var regionInfo = new RegionInfo(culture);
-                ViewBag.CurrencySymbol = regionInfo.CurrencySymbol;
-            }
-            catch (CultureNotFoundException)
-            {
-                culture = "en-US";
-                ViewBag.CurrencySymbol = new RegionInfo(culture).CurrencySymbol;
-            }
+            var isInRole = await _userManager.IsInRoleAsync(CurrentUser, "UserPremium");
 
             var totalTransactions = await _context.Transaction
                 .Where(i => i.UserId == CurrentUser.Id)
                 .CountAsync();
             var totalPages = (int)Math.Ceiling(totalTransactions / (double)PageSize);
 
-            ViewBag.CurrentCulture = culture;
             ViewBag.CurrentPage = page;
             ViewBag.TotalPages = totalPages;
+            ViewBag.IsUserPremium = isInRole;
 
-            var transactionItems = await _context.Transaction
-               .Where(i => i.UserId == CurrentUser.Id)
-               .OrderByDescending(t => t.TransactionId)
-               .Skip((page - 1) * PageSize) 
-               .Take(PageSize)
-               .ToListAsync();
+            ViewBag.SortOrder = sortOrder;
+            ViewBag.SortDirection = sortDirection;
+
+            IQueryable<Transaction> transactionsQuery = _context.Transaction.Where(i => i.UserId == CurrentUser.Id);
+            if (isInRole)
+            {
+                switch (sortOrder)
+                {
+                    case "TransactionName":
+                        transactionsQuery = sortDirection == "asc" ?
+                            transactionsQuery.OrderBy(t => t.TransactionName) :
+                            transactionsQuery.OrderByDescending(t => t.TransactionName);
+                        break;
+                    case "AdditionDate":
+                        transactionsQuery = sortDirection == "asc" ?
+                            transactionsQuery.OrderBy(t => t.AdditionDate) :
+                            transactionsQuery.OrderByDescending(t => t.AdditionDate);
+                        break;
+                    case "Category":
+                        transactionsQuery = sortDirection == "asc" ?
+                            transactionsQuery.OrderBy(t => t.CategoryId) :
+                            transactionsQuery.OrderByDescending(t => t.CategoryId);
+                        break;
+                    case "Amount":
+                        transactionsQuery = sortDirection == "asc" ?
+                            transactionsQuery.OrderBy(t => t.Amount) :
+                            transactionsQuery.OrderByDescending(t => t.Amount);
+                        break;
+                    default:
+                        transactionsQuery = transactionsQuery
+                            .OrderByDescending(t => t.AdditionDate)
+                            .ThenByDescending(t => t.TransactionId);
+                        break;
+                }
+            } 
+            else
+            {
+                transactionsQuery = transactionsQuery.OrderByDescending(t => t.TransactionId);
+            }
+            
+
+            var transactionItems = await transactionsQuery
+                .Skip((page - 1) * PageSize)
+                .Take(PageSize)
+                .ToListAsync();
 
 
             ViewBag.Categories = await _context.Categories.Where(c => c.UserId == CurrentUser.Id).ToListAsync();
@@ -105,13 +123,14 @@ namespace LabProject.Controllers
 
         // POST: TransactionController/Create
         [HttpPost]
-        public IActionResult SaveMultiple([FromBody] List<Transaction> transactions)
+        public async Task<IActionResult> SaveMultiple([FromBody] List<Transaction> transactions)
         {
             
             if (transactions == null || !transactions.Any())
             {
                 return BadRequest("No transactions provided.");
             }
+            var isInRole = await _userManager.IsInRoleAsync(CurrentUser, "UserPremium");
 
             var totalTransactions = _context.Transaction
                 .Where(i => i.UserId == CurrentUser.Id)
@@ -125,7 +144,7 @@ namespace LabProject.Controllers
                     return BadRequest(new { success = false, message = "Validation failed for one or more transactions." });
                 }
 
-                if (totalTransactions >= 50)
+                if (totalTransactions >= 50 && !isInRole)
                 {
                     return BadRequest(new { success = false, message = "Transaction limit reached." });
                 }

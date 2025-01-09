@@ -1,5 +1,6 @@
 ﻿@using Microsoft.AspNetCore.Identity
 @using LabProject.Areas.Identity.Data
+@model IEnumerable<LabProject.Models.Transaction>
 
 @inject SignInManager<ApplicationUser> SignInManager
 @inject UserManager<ApplicationUser> UserManager
@@ -8,8 +9,45 @@
     Layout = ViewBag.Layout;
     ViewData["Title"] = "Dashboard";
     var exp = ViewBag.Expenses;
+    var categories = ViewBag.Categories as List<LabProject.Models.Category>;
+    var categoryExpenses = ViewBag.CategoryExpenses as List<dynamic>;
+    var months = ViewBag.Months as string[];
+    var incomeData = ViewBag.IncomeData as decimal[];
+    var expenseData = ViewBag.ExpenseData as decimal[];
+}
 
-    
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        var ctx = document.getElementById('barChart').getContext('2d');
+        var barChart = new Chart(ctx, {
+        type: 'bar', // typ wykresu: słupkowy
+        data: {
+        labels: @Html.Raw(Json.Serialize(months)), // Miesiące z ViewBag
+        datasets: [{
+        label: 'Income',
+        data: @Html.Raw(Json.Serialize(incomeData)), 
+        backgroundColor: 'rgba(75, 192, 192, 0.2)', 
+        borderColor: 'rgba(75, 192, 192, 1)', 
+        borderWidth: 1
+        }, {
+        label: 'Expense',
+        data: @Html.Raw(Json.Serialize(expenseData)), // Wydatki
+        backgroundColor: 'rgba(255, 99, 132, 0.2)', 
+        borderColor: 'rgba(255, 99, 132, 1)', 
+        borderWidth: 1
+        }]
+        },
+        options: {
+        responsive: true,
+        scales: {
+        y: {
+        beginAtZero: true
+        }
+        }
+        }
+        });
+    </script>
 }
 
 <div class="container w-100 d-flex justify-content-between align-items-center flex-wrap">
@@ -17,8 +55,8 @@
         <span class="fs-2">Welcome to the</span>
         <h1 class="m-0 ms-2 fw-semibold fs-2">@ViewData["Title"]</h1>
     </div>
-    @* <h2>@Html.Raw(ViewBag.Message) 👋🏼</h2> *@
-    
+    <h2>@Html.Raw(ViewBag.Message) 👋🏼</h2>
+
 </div>
 
 
@@ -28,7 +66,7 @@
             <div class="card">
                 <div class="card-body text-center">
                     <h5 class="card-title">Account Balance</h5>
-                    <p class="card-text count" ><span class="h2">@ViewData["Total"]</span></p>
+                    <p class="card-text count"><span class="h2">@ViewData["Balance"]</span></p>
                     <i class='bx bxs-bank fs-1'></i>
                 </div>
             </div>
@@ -64,13 +102,30 @@
 
     <div class="row mt-4">
         <div class="col-md-6">
-            <div class="card">
+            <div class="card h-100">
                 <div class="card-header">
                     <h5 class="card-title m-0 me-2">Expenses by Category (This Month)</h5>
-                    
+
                 </div>
-                <div class="card-body">
-                    <canvas id="expensesByCategoryChart"></canvas>
+                <div class="card-body ">        
+                    <table cellpadding="10" width="100%">
+                        @if (categoryExpenses != null)
+                        {
+                            foreach (var item in categoryExpenses)
+                            {
+                                <tr>
+                                    <td><b><i class='bx bxs-dollar-circle'></i> @item.CategoryName</b></td>
+                                    <td style="text-align: right;">@item.TotalExpenses.ToString("C")</td>
+                                </tr>
+                            }
+                        }
+                        else
+                        {
+                            <tr>
+                                <td colspan="2">No data available.</td>
+                            </tr>
+                        }
+                    </table>
                 </div>
             </div>
         </div>
@@ -78,72 +133,96 @@
             <div class="card">
                 <div class="card-header">
                     <h5 class="card-title m-0 me-2">Income vs. Expenses (Last 3 Months)</h5>
-                    
+
                 </div>
                 <div class="card-body">
-                    <canvas id="incomeVsExpensesChart"></canvas>
+                    @if (!User.IsInRole("UserPremium"))
+                    {
+                        <p>This feature is available only for our Premium users</p>
+                    }
+                    @if (User.IsInRole("UserPremium"))
+                    {
+                        <canvas id="barChart" width="400" height="200"></canvas>
+                    }
                 </div>
             </div>
         </div>
     </div>
-
-@if (User.IsInRole("UserPremium")){
+    @if (User.IsInRole("UserPremium"))
+    {
+        <div class="card table-responsive text-nowrap mt-4">
+            @* ################### TRANSACTION LIST  *@
+            <table class="card-body table">
+                <thead>
+                    <tr>
+                        <th>
+                            Transaction name
+                        </th>
+                        <th>
+                            Date
+                        </th>
+                        <th>
+                            Category
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Amount)
+                        </th>
+                        
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model.Any())
+                    {
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.TransactionName)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.AdditionDate)
+                                </td>
+                                <td>
+                                    <p class="@(categories.FirstOrDefault(s => s.Id == item.CategoryId).Type == "Expense" ? "badge bg-label-danger" : "badge bg-label-success") me-1 fw-bold">@categories.FirstOrDefault(i => i.Id == item.CategoryId)?.Name</p>
+                                </td>
+                                <td>
+                                    @item.Amount.ToString("C", @ViewBag.CurrencyCustomFormat)
+                                </td>
+                                
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="6">
+                                <p class="pt-2">You don't have a transaction yet.</p>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+    else
+    {
         <div class="row mt-4">
             <div class="col-md-12">
                 <div class="card">
                     <div class="card-header">
-                        <h5 class="card-title m-0 me-2">Recent Transactions</h5>
+                        <h3 class="card-title m-0 me-2">Wanna see more?</h3>
 
                     </div>
                     <div class="card-body">
-                        <table class="table table-striped">
-                            <thead>
-                                <tr>
-                                    <th>Date</th>
-                                    <th>Category</th>
-                                    <th>Description</th>
-                                    <th>Amount</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>2024-12-09</td>
-                                    <td>Food</td>
-                                    <td>Lunch at Restaurant</td>
-                                    <td>$25.00</td>
-                                </tr>
-                                <tr>
-                                    <td>2024-12-09</td>
-                                    <td>Transport</td>
-                                    <td>Taxi fare</td>
-                                    <td>$15.00</td>
-                                </tr>
-                                <tr>
-                                    <td>2024-12-09</td>
-                                    <td>Entertainment</td>
-                                    <td>Movie Ticket</td>
-                                    <td>$12.00</td>
-                                </tr>
-                                <tr>
-                                    <td>2024-12-09</td>
-                                    <td>Food</td>
-                                    <td>Groceries</td>
-                                    <td>$40.00</td>
-                                </tr>
-                                <tr>
-                                    <td>2024-12-09</td>
-                                    <td>Utilities</td>
-                                    <td>Electricity Bill</td>
-                                    <td>$60.00</td>
-                                </tr>
+                        <p>Unlock the full potential of your experience with our Premium subscription! Gain exclusive access to detailed transaction summaries and a suite of advanced features designed to enhance your journey. Don’t miss out – upgrade today and take control of your data like never before!</p>
+                        <button class="btn btn-primary" onclick="location.href='@Url.Action("AssignPremiumRole", "Dashboard")'">Buy Premium </button>
 
-                            </tbody>
-                        </table>
                     </div>
                 </div>
             </div>
         </div>
-}
+    }
+
     
 </div>
 
