@@ -1,0 +1,51 @@
+﻿@page
+@model RegisterConfirmationModel
+
+@inject SignInManager<ApplicationUser> SignInManager
+@{
+    ViewData["Title"] = "Register confirmation";
+    Layout = "/Views/Shared/_Layout.cshtml";
+}
+
+
+<div class="authentication-wrapper authentication-basic px-4">
+    <div class="authentication-inner">
+
+
+        <!-- Verify Email -->
+        <div class="card px-sm-6 px-0">
+            <div class="card-body">
+                <!-- Logo -->
+                <div class="app-brand justify-content-center">
+                    <a href="index.html" class="app-brand-link gap-2">
+                        <span class="brand_custom_width bg-menu-theme app-brand-logo demo ">
+                            <img class="w-100" src="~/assets/logo.png" />
+                        </span>
+                        <span class="app-brand-text demo text-body fw-bolder ms-2">MoneyMind</span>
+                    </a>
+                </div>
+                <!-- /Logo -->
+                @{
+                    if (@Model.DisplayConfirmAccountLink)
+                    {
+                        <h4 class="mb-1">Verify your email ✉️</h4>
+                        <p class="text-start mb-0">
+                            This app does not currently have a real email sender registered, see <a href="https://aka.ms/aspaccountconf">these docs</a> for how to configure a real email sender.
+                        </p>
+                        <p>Normally this would be emailed: </p>
+                        <a id="confirm-link" class="btn btn-primary w-100 my-6" href="@Model.EmailConfirmationUrl">Confirm</a>
+                    }
+                    else
+                    {
+                        <p>
+                            Please check your email to confirm your account.
+                        </p>
+                    }
+                }
+                
+            </div>
+        </div>
+        <!-- /Verify Email -->
+    </div>
+</div>
+

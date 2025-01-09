@@ -69,7 +69,7 @@ body {
 }
 
 .nav_bg span,
-.nav_bg a {
+.nav_bg a.menu-link {
     color: #233446 !important;
 }
 
@@ -82,16 +82,27 @@ body {
     margin-bottom: 300px;
 }
 
-@keyframes hero-image_animation {
-
-
-    50% {
-        transform: translateY(5%);
-    }
-
+.highlight_text strong,
+.highlight_heading strong {
+    color: #333;
+    background: linear-gradient(104deg, #696cff00 .9%, #696cff 2.4%, #696cff80 5.8%, #696cff1a 93%, #696cffb3 96%, #696cff00 98%), linear-gradient(183deg, #696cff00, #696cff4d 7.9%, #696cff00 15%);
+    padding: 0.1em 0.3em;
+    -webkit-box-decoration-break: clone;
+    box-decoration-break: clone;
+    margin: 0;
+    border-radius: 5px;
+    text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
 }
 
-.hero_image {
+    @keyframes hero-image_animation {
+
+
+        50% {
+            transform: translateY(5%);
+        }
+    }
+
+    .hero_image {
     position: absolute;
     top: 0;
     left: 60%;
