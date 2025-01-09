@@ -10,7 +10,44 @@
     ViewData["Title"] = "Dashboard";
     var exp = ViewBag.Expenses;
     var categories = ViewBag.Categories as List<LabProject.Models.Category>;
+    var categoryExpenses = ViewBag.CategoryExpenses as List<dynamic>;
+    var months = ViewBag.Months as string[];
+    var incomeData = ViewBag.IncomeData as decimal[];
+    var expenseData = ViewBag.ExpenseData as decimal[];
+}
 
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        var ctx = document.getElementById('barChart').getContext('2d');
+        var barChart = new Chart(ctx, {
+        type: 'bar', // typ wykresu: słupkowy
+        data: {
+        labels: @Html.Raw(Json.Serialize(months)), // Miesiące z ViewBag
+        datasets: [{
+        label: 'Income',
+        data: @Html.Raw(Json.Serialize(incomeData)), 
+        backgroundColor: 'rgba(75, 192, 192, 0.2)', 
+        borderColor: 'rgba(75, 192, 192, 1)', 
+        borderWidth: 1
+        }, {
+        label: 'Expense',
+        data: @Html.Raw(Json.Serialize(expenseData)), // Wydatki
+        backgroundColor: 'rgba(255, 99, 132, 0.2)', 
+        borderColor: 'rgba(255, 99, 132, 1)', 
+        borderWidth: 1
+        }]
+        },
+        options: {
+        responsive: true,
+        scales: {
+        y: {
+        beginAtZero: true
+        }
+        }
+        }
+        });
+    </script>
 }
 
 <div class="container w-100 d-flex justify-content-between align-items-center flex-wrap">
@@ -70,8 +107,25 @@
                     <h5 class="card-title m-0 me-2">Expenses by Category (This Month)</h5>
 
                 </div>
-                <div class="card-body">
-                    <canvas id="expensesByCategoryChart"></canvas>
+                <div class="card-body">        
+                    <table cellpadding="10" width="100%">
+                        @if (categoryExpenses != null)
+                        {
+                            foreach (var item in categoryExpenses)
+                            {
+                                <tr>
+                                    <td><b>@item.CategoryName</b></td>
+                                    <td style="text-align: right;">@item.TotalExpenses.ToString("C")</td>
+                                </tr>
+                            }
+                        }
+                        else
+                        {
+                            <tr>
+                                <td colspan="2">No data available.</td>
+                            </tr>
+                        }
+                    </table>
                 </div>
             </div>
         </div>
@@ -82,7 +136,14 @@
 
                 </div>
                 <div class="card-body">
-                    <canvas id="incomeVsExpensesChart"></canvas>
+                    @if (!User.IsInRole("UserPremium"))
+                    {
+                        <p>This feature is available only for our Premium users</p>
+                    }
+                    @if (User.IsInRole("UserPremium"))
+                    {
+                        <canvas id="barChart" width="400" height="200"></canvas>
+                    }
                 </div>
             </div>
         </div>
