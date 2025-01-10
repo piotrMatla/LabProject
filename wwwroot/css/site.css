@@ -18,7 +18,8 @@ html {
 }
 
 body {
-  overflow-x: hidden;
+    overflow-x: hidden;
+    background-color: #696CFF;
 }
 
 /*.dashboard_menu {
@@ -27,6 +28,28 @@ body {
     bottom: 0;
 }
 */
+
+.image_container {
+    margin-top: -15%;
+    width: 60vw;
+    perspective: 1000px;
+}
+
+#tilt_image {
+    width: 100%;
+    height: 100%;
+    transition: transform 0.1s ease-out;
+    transform-style: preserve-3d;
+    will-change: transform;
+}
+
+.full_height {
+    max-height: 100vh; 
+    height: 100vh;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+}
 
 .sidebar {
     position: fixed;

@@ -1,16 +1,78 @@
 ﻿@{
     ViewData["Title"] = "Premium Subscription";
+    
 }
 
-<div class="container text-center">
-    <h2>Thank you for subscribing to Premium!</h2>
-    <p class="lead">We are excited to have you on board and provide you with premium features.</p>
-    <p>You will need to log out and log in again to access all the new premium functionalities.</p>
-    <p>We appreciate your support and hope you enjoy your upgraded experience!</p>
-	<p class="mt-3">After logging back in, your new premium features will be available.</p>
-    <div class="mt-4">
-        <a href="@Url.Page("/Account/Logout", new { area = "Identity" })" class="menu-link">
-            Logout
-        </a>
+<section class="section-py first-section-pt">
+    <div class="container ">
+        <h2 class="text-center mb-2 fs-3">Pricing Plans</h2>
+        <p class="text-center mb-5">Essential tools for every budget – tailored to your needs.</p>
+        
+
+        <div class="row g-6 w-100 justify-content-center ">
+            <!-- Basic -->
+            <div class="col-lg-4 ">
+                <div class="card border rounded shadow-none h-100">
+                    <div class="card-body d-flex flex-wrap pt-12 px-5 align-content-lg-between">
+                        <div>
+                            <div class="mt-3 mb-5 text-center">
+                                <img src="~/assets/images/plane.png" alt="Basic Image" width="90">
+                            </div>
+                            <h4 class="card-title text-center text-capitalize mb-1">Basic</h4>
+                            <p class="text-center mb-5">A simple start for everyone</p>
+                            <div class="text-center h-px-50">
+                                <div class="d-flex justify-content-center">
+                                    <h1 class="mb-0 text-primary">Free</h1>
+                                </div>
+                            </div>
+
+                            <ul class="list-group my-5 pt-9">
+                                <li class="mb-4 d-flex align-items-center"><span class="badge p-50 w-px-20 h-px-20 rounded-pill bg-label-primary me-2"><i class="bx bx-check bx-xs"></i></span><span>Add up to 50 transactions per month</span> </li>
+                                <li class="mb-4 d-flex align-items-center"><span class="badge p-50 w-px-20 h-px-20 rounded-pill bg-label-primary me-2"><i class="bx bx-check bx-xs"></i></span><span>No spending comparison for the last 3 months</span> </li>
+                                <li class="mb-4 d-flex align-items-center"><span class="badge p-50 w-px-20 h-px-20 rounded-pill bg-label-primary me-2"><i class="bx bx-check bx-xs"></i></span><span>Limited version of the dashboard</span> </li>
+                            </ul>
+                        </div>
+                        
+                        <a href="payment-page.html" class="btn btn-label-success d-grid w-100">Your Current Plan</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Pro -->
+            <div class="col-lg-4">
+                <div class="card border-primary border shadow-none">
+                    <div class="card-body position-relative pt-4">
+                        <div class="position-absolute end-0 me-5 top-0 mt-4">
+                            <span class="badge bg-label-primary rounded-1">Promo</span>
+                        </div>
+                        <div class="my-5 pt-6 text-center">
+                            <img src="~/assets/images/rocket.png" alt="Pro Image" width="90">
+                        </div>
+                        <h4 class="card-title text-center text-capitalize mb-1">Premium</h4>
+                        <p class="text-center mb-5">For small to medium businesses</p>
+                        <div class="text-center h-px-50">
+                            <div class="d-flex justify-content-center">
+                                <sup class="h6 text-body pricing-currency mt-2 mb-0 me-1">@(ViewBag.CurrentCulture == "pl-PL"? "zł" : "$")</sup>
+                                <h1 class="price-toggle price-yearly text-primary mb-0">0</h1>
+                                <sub class="h6 text-body pricing-duration mt-auto mb-1 ms-1"><s>@(ViewBag.CurrentCulture == "pl-PL" ? "30 zł" : "7 $") / month</s></sub>
+                            </div>
+                        </div>
+
+                        <ul class="list-group my-5 pt-9">
+                            <li class="mb-4 d-flex align-items-center"><span class="badge p-50 w-px-20 h-px-20 rounded-pill bg-label-primary me-2"><i class="bx bx-check bx-xs"></i></span><span>Unlimited transactions</span> </li>
+                            <li class="mb-4 d-flex align-items-center"><span class="badge p-50 w-px-20 h-px-20 rounded-pill bg-label-primary me-2"><i class="bx bx-check bx-xs"></i></span><span>Spending comparison for the last 3 months</span> </li>
+                            <li class="mb-4 d-flex align-items-center"><span class="badge p-50 w-px-20 h-px-20 rounded-pill bg-label-primary me-2"><i class="bx bx-check bx-xs"></i></span><span>Advanced sorting options for transactions</span> </li>
+                            <li class="mb-4 d-flex align-items-center"><span class="badge p-50 w-px-20 h-px-20 rounded-pill bg-label-primary me-2"><i class="bx bx-check bx-xs"></i></span><span>Additional charts for better financial insights</span> </li>
+                            <li class="mb-4 d-flex align-items-center"><span class="badge p-50 w-px-20 h-px-20 rounded-pill bg-label-primary me-2"><i class="bx bx-check bx-xs"></i></span><span>Fully featured and enhanced dashboard</span> </li>
+                            <li class="mb-0 d-flex align-items-center"><span class="badge p-50 w-px-20 h-px-20 rounded-pill bg-label-primary me-2"><i class="bx bx-check bx-xs"></i></span><span>Priority customer support</span> </li>
+                        </ul>
+                        <a onclick="successModal()" class="btn btn-primary d-grid w-100" asp-controller="Dashboard" asp-action="AssignPremiumRole">Upgrade</a>
+                    </div>
+                </div>
+            </div>
+
+        </div>
     </div>
-</div>
+</section>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>

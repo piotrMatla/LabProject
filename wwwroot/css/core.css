@@ -145,7 +145,7 @@ body {
   line-height: var(--bs-body-line-height);
   color: var(--bs-body-color);
   text-align: var(--bs-body-text-align);
-  background-color: var(--bs-body-bg);
+/*  background-color: var(--bs-body-bg);*/
   -webkit-text-size-adjust: 100%;
   -webkit-tap-highlight-color: rgba(34, 48, 62, 0);
 }
@@ -7741,6 +7741,12 @@ label.btn {
   color: #fff !important;
   background-color: #66c732 !important;
   border-color: #66c732 !important;
+}
+
+.btn-label-success {
+    color: #71dd37 !important;
+    border-color: rgba(0, 0, 0, 0);
+    background: #e8fadf;
 }
 .btn-check:focus + .btn-success, .btn-success:focus, .btn-success.focus {
   color: #fff;
@@ -22028,10 +22034,10 @@ html:not(.layout-menu-fixed) .menu-inner-shadow {
   transition: opacity 0.3s ease-in-out;
 }
 .menu-header .menu-header-text {
-  text-transform: uppercase;
-  letter-spacing: 0.4px;
-  white-space: nowrap;
-  color: #a7acb2;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+    white-space: nowrap;
+    color: #d2d3f2;
 }
 .menu-header::before, .menu-inner > .menu-header::before {
   background-color: #e4e6e8;

@@ -21,9 +21,9 @@
     <script>
         var ctx = document.getElementById('barChart').getContext('2d');
         var barChart = new Chart(ctx, {
-        type: 'bar', // typ wykresu: słupkowy
+        type: 'bar',
         data: {
-        labels: @Html.Raw(Json.Serialize(months)), // Miesiące z ViewBag
+        labels: @Html.Raw(Json.Serialize(months)), 
         datasets: [{
         label: 'Income',
         data: @Html.Raw(Json.Serialize(incomeData)), 
@@ -32,7 +32,7 @@
         borderWidth: 1
         }, {
         label: 'Expense',
-        data: @Html.Raw(Json.Serialize(expenseData)), // Wydatki
+        data: @Html.Raw(Json.Serialize(expenseData)),
         backgroundColor: 'rgba(255, 99, 132, 0.2)', 
         borderColor: 'rgba(255, 99, 132, 1)', 
         borderWidth: 1
@@ -52,10 +52,10 @@
 
 <div class="container w-100 d-flex justify-content-between align-items-center flex-wrap">
     <div class="d-flex align-items-center mb-2">
-        <span class="fs-2">Welcome to the</span>
-        <h1 class="m-0 ms-2 fw-semibold fs-2">@ViewData["Title"]</h1>
+        <span class="fs-3">Welcome to the</span>
+        <h1 class="m-0 ms-2 fw-semibold fs-3">@ViewData["Title"]</h1>
     </div>
-    <h2>@Html.Raw(ViewBag.Message) 👋🏼</h2>
+    <h2 class="fs-3">@Html.Raw(ViewBag.Message) 👋🏼</h2>
 
 </div>
 
@@ -130,15 +130,18 @@
             </div>
         </div>
         <div class="col-md-6">
-            <div class="card">
-                <div class="card-header">
-                    <h5 class="card-title m-0 me-2">Income vs. Expenses (Last 3 Months)</h5>
-
+            <div class="card h-100 @(!User.IsInRole("UserPremium") ? "bg-primary text-white": "")">
+                <div class="card-header ">
+                    
+                    <h5 class="card-title position-relative m-0 me-2 z-5 @(!User.IsInRole("UserPremium") ? "text-white" : "")">Income vs. Expenses (Last 3 Months)</h5>
+                    
                 </div>
                 <div class="card-body">
+
                     @if (!User.IsInRole("UserPremium"))
                     {
-                        <p>This feature is available only for our Premium users</p>
+                        <img class="w-75 w-md-25 position-absolute end-0 bottom-0 z-0 opacity-75" src="~/assets/images/premium.svg" alt="Premium graphic" />
+                        <p class="position-relative z-5">This feature is available <br />only for our Premium users</p>
                     }
                     @if (User.IsInRole("UserPremium"))
                     {
@@ -215,7 +218,7 @@
                     </div>
                     <div class="card-body">
                         <p>Unlock the full potential of your experience with our Premium subscription! Gain exclusive access to detailed transaction summaries and a suite of advanced features designed to enhance your journey. Don’t miss out – upgrade today and take control of your data like never before!</p>
-                        <button class="btn btn-primary" onclick="location.href='@Url.Action("AssignPremiumRole", "Dashboard")'">Buy Premium </button>
+                        <a class="btn btn-primary" asp-controller="Dashboard" asp-action="Premium" >Buy Premium </a>
 
                     </div>
                 </div>
@@ -223,7 +226,9 @@
         </div>
     }
 
+
     
+
 </div>
 
 

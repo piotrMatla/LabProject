@@ -175,7 +175,8 @@ namespace LabProject.Controllers
                     {
                         // Przekierowanie do widoku Premium
                         await _signInManager.RefreshSignInAsync(CurrentUser);
-                        return RedirectToAction("Premium");
+                        await Task.Delay(1000);
+                        return RedirectToAction("Index", "Dashboard");
                     }
                     else
                     {
@@ -190,8 +191,15 @@ namespace LabProject.Controllers
         }
 
         // GET: DashboardController/Details/5
+        [Authorize]
         public ActionResult Premium()
         {
+            SetCurrencySymbol();
+            if (User.IsInRole("UserPremium"))
+            {
+                return Forbid(); 
+            }
+
             return View();
         }
 
