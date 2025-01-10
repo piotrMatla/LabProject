@@ -119,13 +119,13 @@ namespace LabProject.Controllers
 
                 // Zapytanie do bazy danych, aby pobrać sumę wydatków z poprzedniego miesiąca
                 var totalExp = await _context.Transaction
-                    .Where(t => categories.Select(c => c.Id).Contains(t.CategoryId) && t.AdditionDate >= firstDayOfPreviousMonth && t.AdditionDate <= lastDayOfPreviousMonth)
+                    .Where(t => categories.Select(c => c.Id).Contains(t.CategoryId) && t.AdditionDate >= firstDayOfPreviousMonth && t.AdditionDate <= lastDayOfPreviousMonth && t.UserId == CurrentUser.Id)
                     .SumAsync(t => t.Amount);
 
                 expenseData[i] = totalExp;
 
                 var totalInc = await _context.Transaction
-                    .Where(t => !categories.Select(c => c.Id).Contains(t.CategoryId) && t.AdditionDate >= firstDayOfPreviousMonth && t.AdditionDate <= lastDayOfPreviousMonth)
+                    .Where(t => !categories.Select(c => c.Id).Contains(t.CategoryId) && t.AdditionDate >= firstDayOfPreviousMonth && t.AdditionDate <= lastDayOfPreviousMonth && t.UserId == CurrentUser.Id)
                     .SumAsync(t => t.Amount);
 
                 incomeData[i] = totalInc;
@@ -143,7 +143,7 @@ namespace LabProject.Controllers
             ViewBag.Income = monthIncome.ToString("C", ViewBag.currencyCustomFormat);
             var totalExpansesIncome = totalIncome - totalExpenses;
             ViewBag.Balance = $"{(totalExpansesIncome < 0 ? "-" : string.Empty)} {Math.Abs(totalExpansesIncome).ToString("C", ViewBag.CurrencyCustomFormat)}";
-
+            ViewBag.Saved = (monthIncome - monthExpenses).ToString("C", ViewBag.currencyCustomFormat);
 
             ViewBag.Categories = await _context.Categories.Where(c => c.UserId == CurrentUser.Id).ToListAsync();
 
