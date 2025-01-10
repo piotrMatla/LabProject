@@ -51,7 +51,7 @@ namespace LabProject.Areas.Identity.Pages.Account
             {
                 return RedirectToPage("/Index");
             }
-            returnUrl = returnUrl ?? Url.Content("~/");
+            returnUrl = returnUrl ?? Url.Content("~/Account/Login");
 
             var user = await _userManager.FindByEmailAsync(email);
             if (user == null)
@@ -70,7 +70,7 @@ namespace LabProject.Areas.Identity.Pages.Account
                 EmailConfirmationUrl = Url.Page(
                     "/Account/ConfirmEmail",
                     pageHandler: null,
-                    values: new { area = "Identity", userId = userId, code = code, returnUrl = returnUrl },
+                    values: new { area = "Identity", userId = userId, code = code, returnUrl = Url.Content("~/Account/Login") },
                     protocol: Request.Scheme);
             }
 
