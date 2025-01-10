@@ -9,8 +9,14 @@
     int currentPage = ViewBag.CurrentPage;
     int totalPages = ViewBag.TotalPages;
 
+    string currentSortOrder = ViewBag.SortOrder ?? "TransactionId";
+    string currentSortDirection = ViewBag.SortDirection ?? "desc";
+
     string startItemsRange = currentPage - 1 != 0 ? $"{ currentPage - 1}1" : "1";
-    string endItemsRange = currentPage != totalPages ? $"{currentPage}0" : $"{currentPage - 1}{Model.Count()}";
+    string endItemsRange = currentPage != totalPages
+    ? $"{currentPage}0"
+    : $"{(currentPage - 1 == 0 ? String.Empty : (currentPage - 1).ToString())}{Model.Count()}";
+
     int allTransactions = ViewBag.CountedTransactions;
 
     int maxPagesToShow = 5;
@@ -53,18 +59,72 @@
         <table class="table">
             <thead>
                 <tr>
-                    <th>
-                        Transaction name
-                    </th>
-                    <th>
-                        Date
-                    </th> 
-                    <th>
-                        Category
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.Amount)
-                    </th>
+                    @if (ViewBag.IsUserPremium) 
+                    {
+                        <th>
+                            <a href="?sortOrder=TransactionName&sortDirection=@(currentSortOrder == "TransactionName" && currentSortDirection == "asc" ? "desc" : "asc")">
+                                Transaction name
+                            </a>
+                            @if (ViewBag.SortOrder == "TransactionName")
+                            {
+                                <i class="bx @(ViewBag.SortDirection == "asc" ? "bx-chevron-up" : "bx-chevron-down") fw-bolder"></i>
+                            }
+                            else
+                            {
+                                <i class="bx bx-chevron-right" style="visibility: hidden;"></i>
+                            }
+
+                        </th>
+                        <th>
+                            <a href="?sortOrder=AdditionDate&sortDirection=@(currentSortOrder == "AdditionDate" && currentSortDirection == "asc" ? "desc" : "asc")">Date</a>
+                            @if (ViewBag.SortOrder == "AdditionDate")
+                            {
+                                <i class="bx @(ViewBag.SortDirection == "asc" ? "bx-chevron-up" : "bx-chevron-down") fw-bolder"></i>
+                            }
+                            else
+                            {
+                                <i class="bx bx-chevron-right" style="visibility: hidden;"></i>
+                            }
+                        </th>
+                        <th>
+                            <a href="?sortOrder=CategoryId&sortDirection=@(currentSortOrder == "CategoryId" && currentSortDirection == "asc" ? "desc" : "asc")">Category</a>
+                            @if (ViewBag.SortOrder == "CategoryId")
+                            {
+                                <i class="bx @(ViewBag.SortDirection == "asc" ? "bx-chevron-up" : "bx-chevron-down") fw-bolder"></i>
+                            }
+                            else
+                            {
+                                <i class="bx bx-chevron-right" style="visibility: hidden;"></i>
+                            }
+                        </th>
+                        <th>
+                            <a href="?sortOrder=Amount&sortDirection=@(currentSortOrder == "Amount" && currentSortDirection == "asc" ? "desc" : "asc")">@Html.DisplayNameFor(model => model.Amount)</a>
+                            @if (ViewBag.SortOrder == "Amount")
+                            {
+                                <i class="bx @(ViewBag.SortDirection == "asc" ? "bx-chevron-up" : "bx-chevron-down") fw-bolder"></i>
+                            }
+                            else
+                            {
+                                <i class="bx bx-chevron-right" style="visibility: hidden;"></i>
+                            }
+                        </th>
+                    } 
+                    else 
+                    {
+                        <th>
+                            Transaction name
+                        </th>
+                        <th>
+                            Date
+                        </th>
+                        <th>
+                            Category
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Amount)
+                        </th>
+                    }
+                    
                     <th>
                         @Html.DisplayNameFor(model => model.Note)
                     </th>

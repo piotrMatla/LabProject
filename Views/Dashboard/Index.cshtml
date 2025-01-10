@@ -102,19 +102,19 @@
 
     <div class="row mt-4">
         <div class="col-md-6">
-            <div class="card">
+            <div class="card h-100">
                 <div class="card-header">
                     <h5 class="card-title m-0 me-2">Expenses by Category (This Month)</h5>
 
                 </div>
-                <div class="card-body">        
+                <div class="card-body ">        
                     <table cellpadding="10" width="100%">
                         @if (categoryExpenses != null)
                         {
                             foreach (var item in categoryExpenses)
                             {
                                 <tr>
-                                    <td><b>@item.CategoryName</b></td>
+                                    <td><b><i class='bx bxs-dollar-circle'></i> @item.CategoryName</b></td>
                                     <td style="text-align: right;">@item.TotalExpenses.ToString("C")</td>
                                 </tr>
                             }
@@ -148,24 +148,6 @@
             </div>
         </div>
     </div>
-    @if (!User.IsInRole("UserPremium"))
-    {
-        <div class="row mt-4">
-            <div class="col-md-12">
-            <div class="card">
-                <div class="card-header">
-                    <h3 class="card-title m-0 me-2">Wanna see more?</h3>
-
-                </div>
-                <div class="card-body">
-                        <p>Unlock the full potential of your experience with our Premium subscription! Gain exclusive access to detailed transaction summaries and a suite of advanced features designed to enhance your journey. Don’t miss out – upgrade today and take control of your data like never before!</p>
-                        <button class="btn btn-primary" onclick="location.href='@Url.Action("AssignPremiumRole", "Dashboard")'">Buy Premium </button>
-                
-                </div>
-        </div>
-        </div>
-        </div>
-    }
     @if (User.IsInRole("UserPremium"))
     {
         <div class="card table-responsive text-nowrap mt-4">
@@ -185,10 +167,7 @@
                         <th>
                             @Html.DisplayNameFor(model => model.Amount)
                         </th>
-                        <th>
-                            @Html.DisplayNameFor(model => model.Note)
-                        </th>
-                        <th></th>
+                        
                     </tr>
                 </thead>
                 <tbody>
@@ -209,23 +188,7 @@
                                 <td>
                                     @item.Amount.ToString("C", @ViewBag.CurrencyCustomFormat)
                                 </td>
-                                <td>
-                                    @if (!string.IsNullOrEmpty(item.Note))
-                                    {
-                                        <div class="col">
-                                            <a href="#"
-                                               class="btn btn-link text-nowrap"
-                                               data-bs-toggle="popover"
-                                               data-bs-offset="0,14"
-                                               data-bs-placement="top"
-                                               data-bs-html="true"
-                                               data-bs-content="<p class='p-2'>@item.Note</p>"
-                                               aria-describedby="popover97906">
-                                                Details
-                                            </a>
-                                        </div>
-                                    }
-                                </td>
+                                
                             </tr>
                         }
                     }
@@ -239,6 +202,24 @@
                     }
                 </tbody>
             </table>
+        </div>
+    }
+    else
+    {
+        <div class="row mt-4">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title m-0 me-2">Wanna see more?</h3>
+
+                    </div>
+                    <div class="card-body">
+                        <p>Unlock the full potential of your experience with our Premium subscription! Gain exclusive access to detailed transaction summaries and a suite of advanced features designed to enhance your journey. Don’t miss out – upgrade today and take control of your data like never before!</p>
+                        <button class="btn btn-primary" onclick="location.href='@Url.Action("AssignPremiumRole", "Dashboard")'">Buy Premium </button>
+
+                    </div>
+                </div>
+            </div>
         </div>
     }
 
