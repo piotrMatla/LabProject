@@ -23,7 +23,7 @@
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
     <link rel="stylesheet" href="~/css/page-auth.css" asp-append-version="true" />
 
-    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>    
 </head>
 <body class="bg-white @(currentPage.EndsWith("/Login") ? "overflow-hidden" : "")">
     <header>
@@ -109,8 +109,8 @@
                         <li class="mb-4">
                                 <a class="footer-link" asp-area="Identity" asp-page="/Account/Register">Sign up</a>
                         </li>
-                        <li>
-                                <a class="footer-link" asp-area="" asp-controller="Home" asp-action="Privacy">Policy Privacy</a>
+                        <li class="mb-4">
+                                <a class="footer-link" asp-area="Home" asp-page="/Privacy">Policy Privacy</a>
                         </li>
                     </ul>
                 </div>
