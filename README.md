@@ -1,13 +1,13 @@
 # MoneyMind
 
-Aplikacja **MoneyMind** to narzêdzie do zarz¹dzania bud¿etem stworzone w technologii ASP.NET Core 8.0. Umo¿liwia u¿ytkownikom œledzenie przychodów i wydatków, kategoryzowanie transakcji oraz wizualizacjê danych finansowych za pomoc¹ wykresów. Aplikacja oferuje dwa typy u¿ytkowników: zwyk³ych i premium, przy czym u¿ytkownicy premium maj¹ dostêp do bardziej zaawansowanych funkcji.
+Aplikacja **MoneyMind** to narzÄ™dzie do zarzÄ…dzania budÅ¼etem stworzone w technologii ASP.NET Core 8.0. UmoÅ¼liwia uÅ¼ytkownikom Å›ledzenie przychodÃ³w i wydatkÃ³w, kategoryzowanie transakcji oraz wizualizacjÄ™ danych finansowych za pomocÄ… wykresÃ³w. Aplikacja oferuje dwa typy uÅ¼ytkownikÃ³w: zwykÅ‚ych i premium, przy czym uÅ¼ytkownicy premium majÄ… dostÄ™p do bardziej zaawansowanych funkcji.
 
 ## Wymagania
 
 - **ASP.NET Core 8.0**
 - **Visual Studio**
-- **SQL Server** (do obs³ugi bazy danych)
-- **Chart.js** (do generowania wykresów)
+- **SQL Server** (do obsÅ‚ugi bazy danych)
+- **Chart.js** (do generowania wykresÃ³w)
 - **Entity Framework Core** (do operacji na bazie danych)
 
 ## Instalacja
@@ -17,14 +17,14 @@ Aplikacja **MoneyMind** to narzêdzie do zarz¹dzania bud¿etem stworzone w technol
    git clone https://github.com/piotrMatla/LabProject.git
    ```
 
-2. **Zainstaluj wymagane zale¿noœci:**
-   - Otwórz rozwi¹zanie w Visual Studio.
-   - Przywróæ pakiety NuGet:
-     - Narzêdzia -> Mened¿er pakietów NuGet -> Przywróæ pakiety NuGet.
+2. **Zainstaluj wymagane zaleÅ¼noÅ›ci:**
+   - OtwÃ³rz rozwiÄ…zanie w Visual Studio.
+   - PrzywrÃ³Ä‡ pakiety NuGet:
+     - NarzÄ™dzia -> MenedÅ¼er pakietÃ³w NuGet -> PrzywrÃ³Ä‡ pakiety NuGet.
 
-3. **Skonfiguruj po³¹czenie z baz¹ danych:**
-   - Otwórz plik `appsettings.json`.
-   - Skonfiguruj odpowiedni ³añcuch po³¹czenia z SQL Server w sekcji `LabProjectDbContextConnection` (zamieñ `DESKTOP-0DG8HLA` na nazwê swojego serwera):
+3. **Skonfiguruj poÅ‚Ä…czenie z bazÄ… danych:**
+   - OtwÃ³rz plik `appsettings.json`.
+   - Skonfiguruj odpowiedni Å‚aÅ„cuch poÅ‚Ä…czenia z SQL Server w sekcji `LabProjectDbContextConnection` (zamieÅ„ `DESKTOP-0DG8HLA` na nazwÄ™ swojego serwera):
      ```json
      {
        "ConnectionStrings": {
@@ -33,74 +33,65 @@ Aplikacja **MoneyMind** to narzêdzie do zarz¹dzania bud¿etem stworzone w technol
      }
      ```
 
-4. **Utwórz i zastosuj migracje:**
-   - Otwórz Konsolê Mened¿era Pakietów i uruchom poni¿sze komendy:
+4. **UtwÃ³rz i zastosuj migracje:**
+   - OtwÃ³rz KonsolÄ™ MenedÅ¼era PakietÃ³w i uruchom poniÅ¼sze komendy:
      ```bash
      Add-Migration InitialCreate
      Update-Database
      ```
 
-5. **Dane testowe:**
-   Mo¿esz skorzystaæ z poni¿szych u¿ytkowników testowych:
-   - **U¿ytkownik testowy 1 (Premium):**
-     - Email: `test@aa.pl`
-     - Has³o: `Haslo123!`
-   - **U¿ytkownik testowy 2 (Zwyk³y):**
-     - Email: `no@premium.com`
-     - Has³o: `Haslo321!`
-
-6. **Uruchom aplikacjê:**
+5. **Uruchom aplikacjÄ™:**
    - Kliknij `Run` w Visual Studio.
 
 ## Struktura bazy danych
 
-Aplikacja wykorzystuje dwa g³ówne konteksty bazy danych:
-- **ApplicationDbContext** – kontekst zwi¹zany z Identity.
-- **LabProjectDbContext** – kontekst aplikacji do zarz¹dzania bud¿etem.
+Aplikacja wykorzystuje dwa gÅ‚Ã³wne konteksty bazy danych:
+- **ApplicationDbContext** â€“ kontekst zwiÄ…zany z Identity.
+- **LabProjectDbContext** â€“ kontekst aplikacji do zarzÄ…dzania budÅ¼etem.
 
 ### Tabele:
 - **Categories:** Przechowuje kategorie transakcji (np. "Jedzenie", "Transport").
 - **Transactions:** Przechowuje dane o transakcjach (przychody lub wydatki).
 
-## Dostêpne widoki
+## DostÄ™pne widoki
 
-### 1. **Strona G³ówna**
-   - Widoczna dla niezalogowanych u¿ytkowników.
+### 1. **Strona GÅ‚Ã³wna**
+   - Widoczna dla niezalogowanych uÅ¼ytkownikÃ³w.
    - Opis funkcji aplikacji.
    - Linki do stron logowania i rejestracji.
 
 ### 2. **Strona Logowania / Rejestracji**
-   - Umo¿liwia rejestracjê nowego konta oraz logowanie.
+   - UmoÅ¼liwia rejestracjÄ™ nowego konta oraz logowanie.
 
 ### 3. **Strona Dashboard**
-   - Dostêpna dla zalogowanych u¿ytkowników.
+   - DostÄ™pna dla zalogowanych uÅ¼ytkownikÃ³w.
    - Podsumowanie finansowe oraz raporty.
-   - Wykresy generowane przez Chart.js prezentuj¹ce dane finansowe z ostatnich miesiêcy.
-   - U¿ytkownicy premium maj¹ dostêp do bardziej szczegó³owych raportów.
+   - Wykresy generowane przez Chart.js prezentujÄ…ce dane finansowe z ostatnich miesiÄ™cy.
+   - UÅ¼ytkownicy premium majÄ… dostÄ™p do bardziej szczegÃ³Å‚owych raportÃ³w.
 
 ### 4. **Strona Categories**
-   - Umo¿liwia zarz¹dzanie kategoriami transakcji.
-   - Mo¿liwoœæ personalizacji kategorii wed³ug potrzeb u¿ytkownika.
+   - UmoÅ¼liwia zarzÄ…dzanie kategoriami transakcji.
+   - MoÅ¼liwoÅ›Ä‡ personalizacji kategorii wedÅ‚ug potrzeb uÅ¼ytkownika.
 
 ### 5. **Strona Transactions**
    - Dodawanie, edycja oraz usuwanie transakcji.
-   - Historia transakcji u¿ytkownika.
+   - Historia transakcji uÅ¼ytkownika.
 
 ### 6. **Strona Ustawienia**
-   - Umo¿liwia aktualizacjê danych osobowych (email, numer telefonu, has³o).
+   - UmoÅ¼liwia aktualizacjÄ™ danych osobowych (email, numer telefonu, hasÅ‚o).
 
-### 7. **Strona Polityki Prywatnoœci**
-   - Wyœwietla politykê prywatnoœci aplikacji.
+### 7. **Strona Polityki PrywatnoÅ›ci**
+   - WyÅ›wietla politykÄ™ prywatnoÅ›ci aplikacji.
 
-## Role u¿ytkowników
+## Role uÅ¼ytkownikÃ³w
 
-### **U¿ytkownik Premium:**
-   - Dostêp do zaawansowanych raportów i analiz.
+### **UÅ¼ytkownik Premium:**
+   - DostÄ™p do zaawansowanych raportÃ³w i analiz.
 
-### **U¿ytkownik Zwyk³y:**
-   - Przegl¹d podstawowych raportów.
-   - Zarz¹dzanie transakcjami i kategoriami.
+### **UÅ¼ytkownik ZwykÅ‚y:**
+   - PrzeglÄ…d podstawowych raportÃ³w.
+   - ZarzÄ…dzanie transakcjami i kategoriami.
 
 ---
 
-**MoneyMind** to idealne rozwi¹zanie dla osób, które chc¹ efektywnie zarz¹dzaæ swoimi finansami i lepiej planowaæ swój bud¿et.
+**MoneyMind** to idealne rozwiÄ…zanie dla osÃ³b, ktÃ³re chcÄ… efektywnie zarzÄ…dzaÄ‡ swoimi finansami i lepiej planowaÄ‡ swÃ³j budÅ¼et.
